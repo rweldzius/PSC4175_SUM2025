@@ -71,7 +71,7 @@ You will be assigned weekly problem sets that will test your ability to apply wh
 
 The final grade is calculated as a weighted average of these components with the following weights:
 
-  * **Problem sets**: 4 in total, 19 points each (total of 76 points). There will be two extra credit points available on each problem set.
+  * **Problem sets**: 4 in total, total of 76 points available across all four. There will be a total of eight extra credit points available across the four problem sets.
 
   * **Homeworks**: There are 14 homeworks over the four weeks of class. Each will be worth 2 points, but only 12 will be graded (total 24 points). Thus, you can either miss two homeworks (two freebies) or you can use these two extra homeworks as extra credit. 
 
@@ -80,10 +80,7 @@ See the table below for a breakdown of the percentages, points, and extra credit
 | Item | Percent | Points | EC | Max |
 |:-----|:-----:|:-----:|:-----:|:-----:|
 | pset0 | 0% | 0 | 0 | 0 |
-| pset1 | 19% | 19 | 2 | 21 |
-| pset2 | 19% | 19 | 2 | 21 |
-| pset3 | 19% | 19 | 2 | 21 |
-| pset4 | 19% | 19 | 2 | 21 |
+| pset1-pset4 | 76% | 76 | 8 | 84 |
 | Homeworks | 24% | 24 | 4 | 26 |
 | **Totals** | **100%** | **100** | **12** | **112** |
 
