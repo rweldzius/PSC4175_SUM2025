@@ -153,30 +153,20 @@ Villanova University makes every reasonable effort to allow members of the commu
 | 6/4/25 | Data Wrangling | Replicability and tabular data | [Lecture 4](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_5_slides.html) | [HW 4](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_4.Rmd)  | |
 | 6/5/25 | Multi-/Univariate Analysis | Summaries of variables | [Lecture 5](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_6_slides.html) | [HW 5](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_5.Rmd) |  |
 | 6/6/25 | Multivariate 2 | Visualizations of multiple variables | [Lecture 6](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_6_slides.html) | [HW 6](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_6.Rmd) |  |
-| 6/7/25 | No lecture |  | |  | [PS 2](https://github.com/rweldzius/psc4175_SUM2025/blob/main/Psets/psc4175_pset_2.Rmd) |
-| 9/30/244 | Uncertainty 1 | Uncertainty and bootstrapping | [Lecture 10](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_10_slides.html) | [HW 10](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_10.Rmd) | [PS 5](https://github.com/rweldzius/psc4175_SUM2025/blob/main/Psets/psc4175_pset_5.Rmd) |
-| 10/2/2 | Uncertainty 2 | Confidence statements | [Lecture 11](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_11_slides.html) | [HW 11](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_11.Rmd) | |
-| 10/7/24 |  Review Session |  | | |  |
-| 10/9/24 | Midterm Exam |  | | | |
-| 10/14/24 | Fall Break |  | | | |
-| 10/16/24 | Fall Break |  |  | | |
-| 10/21/24 | Regression 1 | Interpreting output and evaluating model | [Lecture 12](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_12_slides.html) | [HW 12](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_12.Rmd) | [PS 6](https://github.com/rweldzius/psc4175_SUM2025/blob/main/Psets/psc4175_pset_6.Rmd) |
-| 10/23/24 | Regression 2 | Interpreting output and evaluating model | [Lecture 13](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_13_slides.html) | [HW 13](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_13.Rmd) | |
-| 10/28/24 | Regression 3 | Multiple regression, categorical Xs | [Lecture 14](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_14_slides.html) | [HW 14](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_14.Rmd) |  |
-| 10/30/24 | Review Session | Regression | |  | |
-| 11/4/24 | Classification 1 | The concept of logistic regression | [Lecture 15](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_15_slides.html) | [HW 15](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_15.Rmd) | [PS 7](https://github.com/rweldzius/psc4175_SUM2025/blob/main/Psets/psc4175_pset_7.Rmd)  |
-| 11/6/24 | Classification 2 | Interpreting output and evaluating model |[Lecture 16](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_16_slides.html) | [HW 16](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_16.Rmd) |  |
-| 11/11/24 | Classification 3 | Interpreting output and evaluating model | [Lecture 17](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_17_slides.html) | [HW 17](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_17.Rmd) |  |
-| 11/13/24 | Guest Lecture | TBD |  |  | |
-| 11/18/24 | Clustering | k-means clustering | [Lecture 18](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_18_slides.html) | [HW 18](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_18.Rmd) | [PS 8](https://github.com/rweldzius/psc4175_SUM2025/blob/main/Psets/psc4175_pset_8.Rmd) |
-| 11/20/24 | NLP 1 | k-means clustering on text | [Lecture 19](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_19_slides.html) | [HW 19](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_19.Rmd) | |
-| 11/25/24 | NLP 2 | Sentiment analysis | [Lecture 20](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_20_slides.html)  | | |
-| 11/27/24 | No Class |  |  | | |
-| 12/2/24 | Review Session & discuss final projects | |  | | |
-| 12/4/24 | In-class work on final projects | |  | | |
-| 12/9/24 | Final project presentations | |  | | |
-| 12/11/24 | Final project presentations |  |  | | |
-| 12/18/24 | Final Exam Due | |  | | |
+| 6/7/25 | No lecture |  | |  | [PS 1](https://github.com/rweldzius/psc4175_SUM2025/blob/main/Psets/psc4175_pset_1.Rmd) |
+| 6/10/25 | Uncertainty 1 | Uncertainty and bootstrapping | [Lecture 7](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_7_slides.html) | [HW 7](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_7.Rmd) |  |
+| 6/11/25 | Uncertainty 2 | Confidence statements | [Lecture 8](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_8_slides.html) | [HW 8](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_8.Rmd) | |
+| 6/12/25 | Regression 1 | Interpreting output and evaluating model | [Lecture 9](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_9_slides.html) | [HW 9](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_9.Rmd) |  ||
+| 6/13/25 | Regression 2 | Multiple regression, categorical Xs | [Lecture 10](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_10_slides.html) | [HW 10](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_10.Rmd) |  |
+| 6/14/25 | No lecture |  | |  | [PS 2](https://github.com/rweldzius/psc4175_SUM2025/blob/main/Psets/psc4175_pset_2.Rmd)  |
+| 6/17/25 | Classification 1 | The concept of logistic regression | [Lecture 11](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_11_slides.html) | [HW 11](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_11.Rmd) |  |
+| 6/18/25 | Classification 2 | Interpreting output and evaluating model |[Lecture 12](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_12_slides.html) | [HW 12](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_12.Rmd) |  |
+| 6/19/25 | Holiday; No lecture | | | |
+| 6/20/25 | Clustering | k-means clustering | [Lecture 13](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_13_slides.html) | [HW 13](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_13.Rmd) |  |
+| 6/21/25 | No lecture | | | | [PS 3](https://github.com/rweldzius/psc4175_SUM2025/blob/main/Psets/psc4175_pset_3.Rmd) |
+| 6/24/25 | NLP 1 | k-means clustering on text | [Lecture 14](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_14_slides.html) | [HW 14](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_14.Rmd) | |
+| 6/25/25 | NLP 2 | Sentiment analysis | [Lecture 15](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_15_slides.html)  | | |
+| 6/26/25 | The risks of rapid technological change |  |  | | [PS 4](https://github.com/rweldzius/psc4175_SUM2025/blob/main/Psets/psc4175_pset_4.Rmd) |
 
 [Back to ToC](#table-of-contents)
 
