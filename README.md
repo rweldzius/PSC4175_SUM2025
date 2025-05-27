@@ -133,7 +133,7 @@ Villanova University makes every reasonable effort to allow members of the commu
 
 ## Office Hours
 
-  * Thursdays, 4-6PM Villanova time
+  * Thursdays, 10am-12pm Villanova time
   * You must make an appointment for office hours here: https://calendly.com/weldzius/officehours
   * If you cannot make my office hours, please email me your availability at least 24-hours in advance and we can try to find a time that works.
 
