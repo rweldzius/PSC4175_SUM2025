@@ -1,4 +1,4 @@
-# PSC 4175-01: Introduction to Data Science (Fall 2024)
+# PSC 4175-01: Introduction to Data Science (Summer 2025)
 
 ## Table of Contents
 
@@ -13,15 +13,15 @@
     
 ## Course Description
 
-The use of large, quantitative data sets is increasingly central in social science.  Whether one seeks to understand political behavior, economic outcomes, or violent conflict, the availability of large quantities of data has changed the study of social phenomena. In this course, students will learn about data acquisition, management, and visualization — what we call data science — to answer exciting questions in the social sciences. Whereas most data-related courses focus exclusively on probability theory, matrix algebra, and/or statistical estimation, our main focus will be on the computational tools of data science. Students will leave the course with the ability to acquire, clean, analyze, visualize, and analyze various types of political data using the statistical programming language R, which will set them up for success in future statistical courses (as well as the post-graduation job market). No prior background in statistics is required, but students should be familiar with how to use a computer and have a willingness to learn a variety of data science tools. 
+The use of large, quantitative data sets is increasingly central in social science.  Whether one seeks to understand political behavior, economic outcomes, or violent conflict, the availability of large quantities of data has changed the study of social phenomena. In this course, students will learn about data acquisition, management, and visualization — what we call data science — to answer exciting questions in the social sciences. Whereas most data-related courses focus exclusively on probability theory, matrix algebra, and/or statistical estimation, our main focus will be on the computational tools of data science. Students will leave the course with the ability to acquire, clean, visualize, and analyze various types of political data using the statistical programming language R, which will set them up for success in future statistical courses (as well as the post-graduation job market). No prior background in statistics is required, but students should be familiar with how to use a computer and have a willingness to learn a variety of data science tools. 
 
 The contents of this repository represent a work-in-progress and revisions and edits are likely frequent.
 
-The main text for the course is "R For Data Science" which can be assessed free online [here](https://r4ds.hadley.nz).
+The main text for the course is "R For Data Science" which can be assessed free online [here](https://r4ds.hadley.nz). Note that there are no assigned readings from this book; the material is synthesized in the daily homework assignments. However, should you need another source with more detail, you'll find most of the topics we cover in this course in this book.
 
 Villanova has an enterprise site license for Microsoft’s Copilot chat application, which is built off of Open A.I.  Copilot is available to all faculty, staff, and students [here](https://copilot.microsoft.com).
 
-**Class time and location**: M/W 3:20-4:35 in Bartley Hall 2073.
+**Class time and location**: Asynchronous (online), Monday-Thursday May 28 - June 2, 2025.
 
 [Back to ToC](#table-of-contents)
 
@@ -33,7 +33,7 @@ This is the course management software used at Villanova University to support c
 
 ### Campuswire
 
-I have set up a Campuswire workspace for our use this semester to help us better communicate with each other. You will need to create an account and join our workspace by following [this link](https://campuswire.com/p/G45092D3C). The secret PIN can be found on the first announcement on Blackboard. You are encouraged to adopt these [Slack etiquette tips](https://slack.com/blog/collaboration/etiquette-tips-in-slack). Most likely, you will utilize a similar communication system at a future job, so use this time wisely as you adopt best practices. 
+I have set up a Campuswire workspace for our use this semester to help us better communicate with each other. You will need to create an account and join our workspace by following [this link](https://campuswire.com/p/GF9F6AD11). The Code/PIN can be found on the first email I sent to the class. You are encouraged to adopt these [Slack etiquette tips](https://slack.com/blog/collaboration/etiquette-tips-in-slack). Most likely, you will utilize a similar communication system at a future job, so use this time wisely as you adopt best practices. 
 
 Here is the list of channels you should see upon joining the Campuswire workspace:
 
@@ -51,15 +51,15 @@ Here is the list of channels you should see upon joining the Campuswire workspac
 
 ### GitHub
 
-I have created a [GitHub](https://github.com/rweldzius/PSC4175_F2024/tree/main) repository to prepare and share all course-related content. This very syllabus is available as the repository's README and all links below are connected to the appropriate folders, sub-folders, and files in this repository.
+I have created a [GitHub](https://github.com/rweldzius/PSC4175_SUM2025/tree/main) repository to prepare and share all course-related content. This very syllabus is available as the repository's README and all links below are connected to the appropriate folders, sub-folders, and files in this repository.
 
 You are expected to adopt the following workflow for this class:
 
-  1. Prior to each lecture, download the appropriate `.Rmd` file, open it in `RStudio`, and read through it. This is your primary homework assignment (ungraded). As you work through it, try to tweak some of the code and answer the toy examples where provided. Each time you make a change, click the knit button in `RStudio` to see if everything still loads.
+  1. Prior to viewing each lecture, download the appropriate homework `.Rmd` file, open it in `RStudio`, and read through it. This is your primary homework assignment. As you work through it, try to tweak some of the code and answer the toy examples where provided. Each time you make a change, click the knit button in `RStudio` to see if everything still loads. You may find it useful to read through the homework first, then watch the lecture, then go back to the homework and complete the examples. These knitted files should be uploaded to Blackboard by midnight on the day the lecture is assigned; see schedule below.
 
   2. During each lecture, create a new `.Rmd` file to take notes in. As with the homework, you should be tweaking and adjusting things on your own, extending your learning beyond what is covered in lecture.
 
-  3. After each lecture, tweak the notes `.Rmd` file further to test out new ideas that you come up with which were not covered in class. Each lecture's slides will be made available as `PDF` for you use to help you review. Thinking creatively about how to modify and extend what we do together might mean you already guess some of the exam questions!
+  3. After each lecture, tweak the notes `.Rmd` file further to test out new ideas that you come up with which were not covered in the lecture. Each lecture's slides will be made available as `PDF` for you use to help you review. 
 
 [Back to ToC](#table-of-contents)
 
@@ -67,39 +67,22 @@ You are expected to adopt the following workflow for this class:
 
 As with learning any new topic or language, the best strategy is to put in a little effort every day. To this end, you will be assigned homework assignments for each class (see "workflow" above) that correspond with readings from the text. I recommend you read through the book first to get an overview of the topic and then attack the homework. 
 
-In class, as we work through the lecture material, please ask questions. Participation is key for your learning, but it will not be a part of your grade. Instead, you will be assigned weekly problem sets that will test your ability to apply what you've learned in class, and to think creatively about your own data science ideas. These problem sets are assigned on the Monday of each week and are due by **11:59PM Villanova time the following Friday**. You are welcome to collaborate on these problem sets, and are encouraged to ask questions on the Class feed on Campuswire.
-
-There are also two exams and a final project. The first exam is a midterm exam that is scheduled for the Wednesday before Fall break (10/09/2024) and will take place in class. The second exam is a cumulative final that is scheduled for December 18th; note that you can opt of this exam if you are happy with your grade as it stands on the last day of class. The final project will allow you to use the skills you learned in this class to address an interesting research question of your choosing.
+You will be assigned weekly problem sets that will test your ability to apply what you've learned in the lectures. These problem sets are assigned on the Monday of each week and are due by **11:59PM Villanova time the following Friday**. You are welcome to collaborate on these problem sets, and are encouraged to ask questions on the Class feed on Campuswire.
 
 The final grade is calculated as a weighted average of these components with the following weights:
 
-  * **Problem sets**: 8 in total, only 7 of which are worth 5 points each for a total of 35 points. This means you can miss a problem set without it hurting your final grade.
+  * **Problem sets**: 4 in total, total of 76 points available across all four. There will be a total of eight extra credit points available across the four problem sets.
 
-  * **Exams**: Midterm and final. The midterm is worth 20 points and is in-class, and the final worth 20 points and is a take-home. 
-
-  * **Quizzes**: There are 19 quizzes over the course of the semester which can only be taken if you attend class. Each consist of several questions plus an attendance statement. 0.5 points comes from accurately answering all five questions, and 0.5 points comes from signing the attendance statement. Each quiz is worth 1 point of your final grade, and combined comprise the final 15 points, meaning that 4 are not counted toward your final grade.
-    
-  *  **Final Project**: Worth 10 points (write-up 8 points, presentation 2 points). In the last week of the semester, you will present a proposal for an individual research project. The proposal will be a minimum of five pages, using two skills/methods from the first half of class and two from the second half. Your proposal (and presentation) should briefly describe your research puzzle, question, and argument, then present some data that either motivates the puzzle/question/argument or tests the argument using the methods you learned. DO NOT TRY TO PRESENT EVERYTHING FROM YOUR PROPOSAL! 1 EC point will be allocated for giving feedback (minimum of 300 words) to a classmate on a draft of their project (up to 2 EC points allowed by giving feedback to two different classmates). This means you need to share your drafts early! You must submit your feedback(s) with your proposal by **Sunday 12/8/24 at 5pm**. 
-
-  * **Extra Credit**: There is one extra credit point on each problem set, two extra credit points on the midterm and final, and two extra credit points on the final project. Thus the maximum total points you can receive in this class is 125, meaning that if you ace every problem set, the midterm, every quiz, and the final project, you will have 103 points before the final exam. Achieving a perfect score requires a lot of effort, but would allow you to skip the final exam if you so chose.
+  * **Homeworks**: There are 14 homeworks over the four weeks of class. Each will be worth 2 points, but only 12 will be graded (total 24 points). Thus, you can either miss two homeworks (two freebies) or you can use these two extra homeworks as extra credit. 
 
 See the table below for a breakdown of the percentages, points, and extra credit.
 
 | Item | Percent | Points | EC | Max |
 |:-----|:-----:|:-----:|:-----:|:-----:|
-| pset1 | 5% | 5 | 1 | 6 |
-| pset2 | 5% | 5 | 1 | 6 |
-| pset3 | 5% | 5 | 1 | 6 |
-| pset4 | 5% | 5 | 1 | 6 |
-| pset5 | 5% | 5 | 1 | 6 |
-| pset6 | 5% | 5 | 1 | 6 |
-| pset7 | 5% | 5 | 1 | 6 |
-| pset8 | 0% | 0 | 6 | 6 |
-| Quizzes | 15% | 15 | 4 | 19 |
-| Midterm exam | 20% | 20 | 2 | 22 |
-| Final project | 10% | 10 | 2 | 12 |
-| Final exam | 20% | 20 | 2 | 22 |
-| **Totals** | **100%** | **100** | **25** | **125** |
+| pset0 | 0% | 0 | 0 | 0 |
+| pset1-pset4 | 76% | 76 | 8 | 84 |
+| Homeworks | 24% | 24 | 4 | 26 |
+| **Totals** | **100%** | **100** | **12** | **112** |
 
 Letter grades are determined as per the standard Villanova grading system:
 
@@ -122,24 +105,11 @@ Letter grades are determined as per the standard Villanova grading system:
 
 ### Attendance
 
-Students are entitled to one excused absence for any reason that may contribute to their personal wellness. Students must advise the instructor by email before class of their intent to utilize a Personal Day as the reason for their absence. A Personal Day will not be approved retroactively. Students may, but are not required, to provide additional information regarding their absence. Additionally, a Personal Day may not:
-
-  * be used immediately preceding or following a University holiday or break period;
-  * be used on days when exams, presentations or other major assignments are scheduled.
-
-A Personal Day does not grant an automatic extension for items due. Students remain responsible for all assignments, exams, presentations, etc. due on that date. It is in the instructor’s discretion to determine whether any extension is appropriate given individual circumstances.
-
-Quizzes will not be excused due to an absence (excused or unexcused). Remember you have four "freebies" so use these wisely. 
+This course is entirely asynchronous, thus there is no official attendance policy. However, there are specific due dates for assignments, so you must be organized and be sure to submit everything on time. 
 
 ### Late Assignments
 
-Every problem set is assigned on a Monday and due on Blackboard by **11:59PM Villanova time on the following Friday**. Problem sets should be submitted via Blackboard. The problem sets are designed to require no more than two hours in total to complete. Late submissions will be **penalized 1 point off for each day late**. After three days, problem sets will no longer be accepted and will be scored 0. Remember that your lowest scoring problem set will not be counted toward your final grade, effectively giving you one "freebie;" use it wisely! Answer keys for the preceding week's problem set are posted on Wednesdays after class.
-
-### Cell Phones, Laptops, Tablets, etc.
-
-You are expected to bring your laptop to class in order to work through the `.Rmd` file during the lecture. These `.Rmd` files will be posted to the GitHub repository at least 24 hours prior to the lecture. Students are encouraged to download these files and work through them prior to class.
-
-You are asked to silence your cell phone / tablet / smart watch before class begins.
+Homework assignments are due on the day they are assigned by **11:59PM Villanova time**. Late homeworks will not be accepted. Every problem set is assigned on a Monday and due on Blackboard by **11:59PM Villanova time on the following Friday**. Problem sets should be submitted via Blackboard. The problem sets are designed to require no more than a few hours to complete. Late submissions will be **penalized 1 point off for each day late**. After three days, problem sets will no longer be accepted and will be scored 0. 
 
 ### Academic Honor Code
 
@@ -149,7 +119,7 @@ If a student is found responsible for an academic integrity violation, which res
 
 Collaboration is the heart of data science, but your work on your assignments should be your own. Please be careful not to plagiarize. The above link is a very helpful guide to understanding plagiarism. In particular, while students are invited to work on problem sets together, collaboration is prohibited on the midterm and final exams.
 
-Copilot and related Large Language Models (LLMs) are essential tools in the data scientist's toolkit, and acceptable resources for completing the assignments and learning concepts at a deeper level. However, graded assignments cannot be generated purely by these tools. All assignments must include a log of the Copilot prompts and resulting output used to complete the assignment.
+Copilot and related Large Language Models (LLMs) are essential tools in the data scientist's toolkit, and acceptable resources for completing the assignments and learning concepts at a deeper level. However, graded assignments cannot be generated purely by these tools. All assignments must include a log of the Copilot (or other AI programs) prompts and resulting output used to complete the assignment.
 
 ### Office for Access & Disability Services (ADS) and Learning Support Services (LSS)
 
@@ -163,7 +133,7 @@ Villanova University makes every reasonable effort to allow members of the commu
 
 ## Office Hours
 
-  * M & W 1-2pm in SAC 257
+  * Thursdays, 10am-12pm Villanova time
   * You must make an appointment for office hours here: https://calendly.com/weldzius/officehours
   * If you cannot make my office hours, please email me your availability at least 24-hours in advance and we can try to find a time that works.
 
@@ -173,39 +143,28 @@ Villanova University makes every reasonable effort to allow members of the commu
 
 | Date | Topic | Learning Goal | Materials | HW | Pset |
 |:-----|:------|:------|:------|:------|:------|
-| 8/26/24 | Introduction | Scientific method, camps of analysis | [Lecture 1](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_1_slides.html) | [HW 1](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_1.Rmd) | [PS 0](https://github.com/rweldzius/PSC4175_F2024/blob/main/Psets/psc4175_pset_0.Rmd) |
-| 8/28/24 | Intro to R 1 | Objects, functions, and code | [Lecture 2](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_2_slides.html) | [HW 2](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_2.Rmd) | |
-| 9/2/24 | No Class | | | | [PS 1](https://github.com/rweldzius/psc4175_F2024/blob/main/Psets/psc4175_pset_1.Rmd) |
-| 9/4/24 | Intro to R 2 | Visualization in R | [Lecture 3](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_3_slides.html) | [HW 3](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_3.Rmd) | |
-| 9/9/24 | Intro to R 3 | More visualization |[Lecture 4](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_4_slides.html) | [HW 4](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_4.Rmd) | [PS 2](https://github.com/rweldzius/psc4175_F2024/blob/main/Psets/psc4175_pset_2.Rmd) |
-| 9/11/24 | Data Wrangling | Replicability and tabular data | [Lecture 5](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_5_slides.html) | [HW 5](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_5.Rmd)  | |
-| 9/16/24 | Univariate Analysis | Summaries of a single variable | [Lecture 6](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_6_slides.html) | [HW 6](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_6.Rmd) | [PS 3](https://github.com/rweldzius/psc4175_F2024/blob/main/Psets/psc4175_pset_3.Rmd) |
-| 9/18/24 | Multivariate 1 | Summaries of multiple variables | [Lecture 7](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_7_slides.html) | [HW 7](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_7.Rmd)  |  |
-| 9/23/24 | Multivariate 2 | Visualizations of multiple variables | [Lecture 8](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_8_slides.html) | [HW 8](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_8.Rmd) | [PS 4](https://github.com/rweldzius/psc4175_F2024/blob/main/Psets/psc4175_pset_4.Rmd) |
-| 9/25/24 | Multivariate 3 | Visualizations of multiple variables | [Lecture 9](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_9_slides.html) | [HW 9](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_9.Rmd) | |
-| 9/30/244 | Uncertainty 1 | Uncertainty and bootstrapping | [Lecture 10](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_10_slides.html) | [HW 10](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_10.Rmd) | [PS 5](https://github.com/rweldzius/psc4175_F2024/blob/main/Psets/psc4175_pset_5.Rmd) |
-| 10/2/2 | Uncertainty 2 | Confidence statements | [Lecture 11](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_11_slides.html) | [HW 11](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_11.Rmd) | |
-| 10/7/24 |  Review Session |  | | |  |
-| 10/9/24 | Midterm Exam |  | | | |
-| 10/14/24 | Fall Break |  | | | |
-| 10/16/24 | Fall Break |  |  | | |
-| 10/21/24 | Regression 1 | Interpreting output and evaluating model | [Lecture 12](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_12_slides.html) | [HW 12](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_12.Rmd) | [PS 6](https://github.com/rweldzius/psc4175_F2024/blob/main/Psets/psc4175_pset_6.Rmd) |
-| 10/23/24 | Regression 2 | Interpreting output and evaluating model | [Lecture 13](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_13_slides.html) | [HW 13](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_13.Rmd) | |
-| 10/28/24 | Regression 3 | Multiple regression, categorical Xs | [Lecture 14](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_14_slides.html) | [HW 14](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_14.Rmd) |  |
-| 10/30/24 | Review Session | Regression | |  | |
-| 11/4/24 | Classification 1 | The concept of logistic regression | [Lecture 15](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_15_slides.html) | [HW 15](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_15.Rmd) | [PS 7](https://github.com/rweldzius/psc4175_F2024/blob/main/Psets/psc4175_pset_7.Rmd)  |
-| 11/6/24 | Classification 2 | Interpreting output and evaluating model |[Lecture 16](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_16_slides.html) | [HW 16](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_16.Rmd) |  |
-| 11/11/24 | Classification 3 | Interpreting output and evaluating model | [Lecture 17](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_17_slides.html) | [HW 17](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_17.Rmd) |  |
-| 11/13/24 | Guest Lecture | TBD |  |  | |
-| 11/18/24 | Clustering | k-means clustering | [Lecture 18](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_18_slides.html) | [HW 18](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_18.Rmd) | [PS 8](https://github.com/rweldzius/psc4175_F2024/blob/main/Psets/psc4175_pset_8.Rmd) |
-| 11/20/24 | NLP 1 | k-means clustering on text | [Lecture 19](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_19_slides.html) | [HW 19](https://github.com/rweldzius/PSC4175_F2024/blob/main/Homeworks/psc4175_hw_19.Rmd) | |
-| 11/25/24 | NLP 2 | Sentiment analysis | [Lecture 20](https://rweldzius.github.io/PSC4175_F2024/Lectures/psc4175_lecture_20_slides.html)  | | |
-| 11/27/24 | No Class |  |  | | |
-| 12/2/24 | Review Session & discuss final projects | |  | | |
-| 12/4/24 | In-class work on final projects | |  | | |
-| 12/9/24 | Final project presentations | |  | | |
-| 12/11/24 | Final project presentations |  |  | | |
-| 12/18/24 | Final Exam Due | |  | | |
+| 5/28/25 | Introduction | Scientific method, camps of analysis | [Lecture](https://www.youtube.com/watch?v=khJXrh5ccrQ) <br/> [Slides](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/1_intro.html) | [HW1.html](https://rweldzius.github.io/PSC4175_SUM2025/Homeworks/psc4175_hw_1.html) <br/> [HW1.Rmd](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_1.Rmd) |  |
+| 5/29/25 | Intro to R 1 | Objects, functions, and code | [Lecture 2](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_2_slides.html) | [HW 2](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_2.Rmd) | |
+| 5/30/25 | No lecture | | | | [PS 0](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Psets/psc4175_pset_0.Rmd) |
+| 6/2/25 | Intro to R 2 | Visualization in R | [Lecture 3](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_3_slides.html) | [HW 3](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_3.Rmd) | |
+| 6/3/25 | Data Wrangling | Replicability and tabular data | [Lecture 4](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_5_slides.html) | [HW 4](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_4.Rmd)  | |
+| 6/4/25 | Multi-/Univariate Analysis | Summaries of variables | [Lecture 5](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_6_slides.html) | [HW 5](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_5.Rmd) |  |
+| 6/5/25 | Multivariate 2 | Visualizations of multiple variables | [Lecture 6](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_6_slides.html) | [HW 6](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_6.Rmd) |  |
+| 6/6/25 | No lecture |  | |  | [PS 1](https://github.com/rweldzius/psc4175_SUM2025/blob/main/Psets/psc4175_pset_1.Rmd) |
+| 6/9/25 | Uncertainty 1 | Uncertainty and bootstrapping | [Lecture 7](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_7_slides.html) | [HW 7](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_7.Rmd) |  |
+| 6/10/25 | Uncertainty 2 | Confidence statements | [Lecture 8](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_8_slides.html) | [HW 8](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_8.Rmd) | |
+| 6/11/25 | Regression 1 | Interpreting output and evaluating model | [Lecture 9](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_9_slides.html) | [HW 9](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_9.Rmd) |  ||
+| 6/12/25 | Regression 2 | Multiple regression, categorical Xs | [Lecture 10](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_10_slides.html) | [HW 10](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_10.Rmd) |  |
+| 6/13/25 | No lecture |  | |  | [PS 2](https://github.com/rweldzius/psc4175_SUM2025/blob/main/Psets/psc4175_pset_2.Rmd)  |
+| 6/16/25 | Classification 1 | The concept of logistic regression | [Lecture 11](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_11_slides.html) | [HW 11](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_11.Rmd) |  |
+| 6/17/25 | Classification 2 | Interpreting output and evaluating model |[Lecture 12](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_12_slides.html) | [HW 12](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_12.Rmd) |  |
+| 6/18/25 | Clustering | k-means clustering | [Lecture 13](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_13_slides.html) | [HW 13](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_13.Rmd) |  |
+| 6/19/25 | Holiday; No lecture | | | | 
+| 6/20/25 | No lecture | | | | [PS 3](https://github.com/rweldzius/psc4175_SUM2025/blob/main/Psets/psc4175_pset_3.Rmd) |
+| 6/23/25 | NLP 1 | k-means clustering on text | [Lecture 14](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_14_slides.html) | [HW 14](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_14.Rmd) | |
+| 6/24/25 | NLP 2 | Sentiment analysis | [Lecture 15](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_15_slides.html)  | | |
+| 6/25/25 | The risks of rapid technological change (or extra day) |  |  | |  |
+| 6/26/25 | Extra day |  |  | | [PS 4](https://github.com/rweldzius/psc4175_SUM2025/blob/main/Psets/psc4175_pset_4.Rmd) |
 
 [Back to ToC](#table-of-contents)
 
