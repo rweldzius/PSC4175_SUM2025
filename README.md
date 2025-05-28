@@ -143,7 +143,7 @@ Villanova University makes every reasonable effort to allow members of the commu
 
 | Date | Topic | Learning Goal | Materials | HW | Pset |
 |:-----|:------|:------|:------|:------|:------|
-| 5/28/25 | Introduction | Scientific method, camps of analysis | [Lecture](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/1_intro.html) <\br> [Slides](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/1_intro.html) | [HW1.html](https://rweldzius.github.io/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_1.html) <\br> [HW1.Rmd](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_1.Rmd) |  |
+| 5/28/25 | Introduction | Scientific method, camps of analysis | [Lecture](https://www.youtube.com/watch?v=khJXrh5ccrQ) <br/> [Slides](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/1_intro.html) | [HW1.html](https://rweldzius.github.io/PSC4175_SUM2025/Homeworks/psc4175_hw_1.html) <br/> [HW1.Rmd](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_1.Rmd) |  |
 | 5/29/25 | Intro to R 1 | Objects, functions, and code | [Lecture 2](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_2_slides.html) | [HW 2](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_2.Rmd) | |
 | 5/30/25 | No lecture | | | | [PS 0](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Psets/psc4175_pset_0.Rmd) |
 | 6/3/25 | Intro to R 2 | Visualization in R | [Lecture 3](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_3_slides.html) | [HW 3](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_3.Rmd) | |
