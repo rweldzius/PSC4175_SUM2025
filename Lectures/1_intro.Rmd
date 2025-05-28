@@ -43,21 +43,21 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 })
 ```
 
-# Agenda
+<!-- # Agenda -->
 
-1. Course Motivation
+<!-- 1. Course Motivation -->
 
-  - What is data science & why should we care?
+<!--   - What is data science & why should we care? -->
 
-2. Course Objectives
+<!-- 2. Course Objectives -->
 
-  - **Content:** Critical thinking, analysis
+<!--   - **Content:** Critical thinking, analysis -->
 
-  - **Skills:** Computing and analysis in R
+<!--   - **Skills:** Computing and analysis in R -->
 
-3. ChatGPT and data science
-  
-4. Course Expectations & Syllabus review
+<!-- 3. ChatGPT and data science -->
+
+<!-- 4. Course Expectations & Syllabus review -->
 
 ---
 
