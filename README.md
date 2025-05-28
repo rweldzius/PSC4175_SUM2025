@@ -158,8 +158,8 @@ Villanova University makes every reasonable effort to allow members of the commu
 | 6/13/25 | No lecture |  | |  | [PS 2](https://github.com/rweldzius/psc4175_SUM2025/blob/main/Psets/psc4175_pset_2.Rmd)  |
 | 6/16/25 | Classification 1 | The concept of logistic regression | [Lecture 11](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_11_slides.html) | [HW 11](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_11.Rmd) |  |
 | 6/17/25 | Classification 2 | Interpreting output and evaluating model |[Lecture 12](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_12_slides.html) | [HW 12](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_12.Rmd) |  |
-| 6/18/25 | Clustering | k-means clustering | [Lecture 13]
-| 6/19/25 | Holiday; No lecture | | | |(https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_13_slides.html) | [HW 13](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_13.Rmd) |  |
+| 6/18/25 | Clustering | k-means clustering | [Lecture 13](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_13_slides.html) | [HW 13](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_13.Rmd) |  |
+| 6/19/25 | Holiday; No lecture | | | | 
 | 6/20/25 | No lecture | | | | [PS 3](https://github.com/rweldzius/psc4175_SUM2025/blob/main/Psets/psc4175_pset_3.Rmd) |
 | 6/23/25 | NLP 1 | k-means clustering on text | [Lecture 14](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_14_slides.html) | [HW 14](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_14.Rmd) | |
 | 6/24/25 | NLP 2 | Sentiment analysis | [Lecture 15](https://rweldzius.github.io/PSC4175_SUM2025/Lectures/psc4175_lecture_15_slides.html)  | | |
