@@ -25,9 +25,6 @@ class: center, middle, inverse, title-slide
 .institute[
 ### Villanova University
 ]
-.date[
-### Slides Updated: 2025-05-26
-]
 
 ---
 
@@ -45,75 +42,19 @@ class: center, middle, inverse, title-slide
 
 # Agenda
 
-1. Meet the instructor
+1. Course Motivation
 
-2. Course Motivation
+  - What is data science &amp; why should we care?
 
-  - What is data science (DS) &amp; why should we care?
-
-3. Course Objectives
+2. Course Objectives
 
   - **Content:** Critical thinking, analysis
 
   - **Skills:** Computing and analysis in R
 
-4. ChatGPT and data science
+3. ChatGPT and data science
   
-5. Course Expectations &amp; Syllabus review
-
----
-
-# Meet the instructor
-
-- Education
-
---
-
-  - PhD from UCLA Political Science in 2018
-
-  - Postdocs at WashU and Princeton Niehaus
-  
---
-
-- Published some things
-
---
-
-  - Substantive: [global value chains &amp; currency manipulation](https://onlinelibrary.wiley.com/doi/abs/10.1111/ecpo.12184); [European politics](https://link.springer.com/article/10.1007/s11558-020-09410-0); [economics of land use](https://onlinelibrary.wiley.com/doi/abs/10.1093/aepp/ppy007); [book review on currency statecraft](https://www.cambridge.org/core/journals/perspectives-on-politics/article/abs/currency-statecraft-monetary-rivalry-and-geopolitical-ambition-by-benjamin-j-cohen-chicago-university-of-chicago-press-2019-208p-7500-cloth-2500-paper/6CC4A103F963E26FE3ED08A85B95D265) 
-
-  - Policy: [2014 World Trade Report](https://www.wto.org/english/res_e/booksp_e/world_trade_report14_e.pdf); [polarization &amp; lobbying](https://niehaus.princeton.edu/backlash-against-globalization-what’s-next)
-  
---
-
-- Work
-
---
-
-  - World Trade Organization
-  
-  - Commercial Real Estate (2007/8 global financial crisis)
-
----
-
-# Meet the instructor
-
-- Current research
-
---
-
-  - .red[Global value chains] + .blue[currency manipulation]
-
---
-
-  - .red[Financial crises] + .blue[polarization]
-  
---
-
-  - .red[Trade agreements] + .blue[monopolies]
-  
---
-
-  - .red[Inequality] + .blue[economic growth]
+4. Course Expectations &amp; Syllabus review
 
 ---
 
@@ -122,27 +63,27 @@ class: center, middle, inverse, title-slide
 --
 
 background-image: url(./figs/fight_ds_econ.PNG)
-background-size: contain
+background-size: 80%
 
 --
 
 background-image: url(./figs/fight_ds_ps.PNG)
-background-size: contain
+background-size: 80%
 
 --
 
 background-image: url(./figs/fight_ds_cs.PNG)
-background-size: contain
+background-size: 80%
 
 --
 
 background-image: url(./figs/fight_ds_stats.PNG)
-background-size: contain
+background-size: 80%
 
 --
 
 background-image: url(./figs/fight_ds_stem.PNG)
-background-size: contain
+background-size: 80%
 
 ---
 
@@ -153,7 +94,7 @@ background-size: contain
 - No
 
 
-&lt;center&gt;&lt;img src="figs/datagrowth.png" width = "90%"&gt;&lt;/center&gt;
+&lt;center&gt;&lt;img src="figs/datagrowth.png" width = "70%"&gt;&lt;/center&gt;
 
 
 ---
@@ -162,7 +103,7 @@ background-size: contain
 
 - But there are faddish qualities
 
-&lt;center&gt;&lt;img src="figs/hype_cycle.png" width = "85%"&gt;&lt;/center&gt;
+&lt;center&gt;&lt;img src="figs/hype_cycle.png" width = "65%"&gt;&lt;/center&gt;
 
 
 ---
@@ -204,13 +145,13 @@ background-size: contain
 
 # The Two Camps
 
-&lt;center&gt;&lt;img src="figs/camps1.png" width="80%"&gt;&lt;/center&gt;
+&lt;center&gt;&lt;img src="figs/camps1.png" width="60%"&gt;&lt;/center&gt;
 
 ---
 
 # The Two Camps
 
-&lt;center&gt;&lt;img src="figs/camps2.png" width="80%"&gt;&lt;/center&gt;
+&lt;center&gt;&lt;img src="figs/camps2.png" width="60%"&gt;&lt;/center&gt;
 
 ---
 
@@ -255,341 +196,6 @@ background-size: contain
 
 &lt;img src="1_intro_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
 
-
-
----
-
-# .blue[Research] Camp
-
---
-
-&lt;center&gt;&lt;img src="figs/weldzius2021.png" width=80%&gt;&lt;/center&gt;
-
----
-
-# .blue[Research] Camp
-
-1. **.red[Observation]** &amp;rarr; **.blue[Question]**
-  
---
-
-  - Observation is facilitated by .red[data] (Descriptive analysis)
-
---
-
-&lt;img src="figs/bergsten2019_1.png" width="100%"&gt;
-
----
-
-# .blue[Research] Camp
-
-1. **.red[Observation]** &amp;rarr; **.blue[Question]**
-
-  - Observation is facilitated by .red[data] (Descriptive analysis)
-
-&lt;img src="figs/bergsten2019_2.png" width="100%"&gt;
-
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # .blue[Research] Camp --&gt;
-
-&lt;!-- 1. **.red[Observation]** &amp;rarr; **.blue[Question]** --&gt;
-
-&lt;!--   - Observation is facilitated by .red[data] (Descriptive analysis) --&gt;
-
-&lt;!--   - Number of currency manipulators per year according to Bergsten-Gagnon criteria --&gt;
-
-&lt;!-- &lt;img src="figs/weldzius2021_manip.png" width="90%"&gt; --&gt;
-
-
----
-
-# .blue[Research] Camp
-
-1. **.red[Observation]** &amp;rarr; **.blue[Question]**
-
-  - The question pertains to .blue[science]
-  
---
-
-  - e.g., why have countries stopped (or attenuated) currency manipulation?
-
-&lt;center&gt;&lt;img src="figs/currencywar.jpeg" width="80%"&gt;&lt;/center&gt;
-
----
-
-# .blue[Research] Camp
-
-&lt;ol start = 2&gt;
-
-&lt;li&gt;  **.blue[Theory]** &amp;rarr; **.blue[Hypothesis]**
-  
---
-
-  - Theorizing requires abstraction &amp; simplification
-  
---
-
-  - e.g., trade has changed and therefore the exchange rate preferences of political actors have changed
-  
---
-
-  - Changing trade: global value chains now account for 70% of global trade (~50% in 1990s)
-  
---
-  
-  - Hypotheses fall out naturally from well-done theory
-  
---
-  
-  - **H1**: *global value chain trade should moderate the relationship between export dependence and currency manipulation*
-
----
-
-# .blue[Research] Camp
-
-&lt;ol start = 3&gt;
-
-&lt;li&gt; **.red[Data Collection / Wrangling]** &amp;rarr; **.red[Analysis]**
-
-&lt;!--   - Data collection separates "Data Science"... --&gt;
-
-&lt;!--     - ...from "Science, with data" --&gt;
-
-&lt;!-- -- --&gt;
-  
-  - collect national input-output tables (matrices) &amp; estimate global value chain linkages
-
-
----
-
-background-image: url(./figs/plot11_empty1.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_empty2.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_empty3.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_1995.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_1996.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_1997.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_1998.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_1999.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_2000.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_2001.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_2002.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_2003.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_2004.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_2005.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_2006.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_2007.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_2008.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_2009.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_2010.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_2011.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_2012.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_2013.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_2014.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_2015.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_2016.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_2017.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_2018.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_2019.png)
-background-size: contain
-
---
-
-background-image: url(./figs/plot11_2020.png)
-background-size: contain
-
----
-
-# .blue[Research] Camp
-
-&lt;ol start = 3&gt;
-
-&lt;li&gt; **.red[Data Collection / Wrangling]** &amp;rarr; **.red[Analysis]**
-
-- Analysis is informed by the .red[data] you have collected...
-
-- ...and the .blue[hypotheses] you have generated
-
-&lt;center&gt;&lt;img src="figs/figure2a.png" width="60%"&gt;&lt;/center&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # .blue[Research] Camp --&gt;
-
-&lt;!-- &lt;ol start = 3&gt; --&gt;
-
-&lt;!-- &lt;li&gt; **.red[Data Collection / Wrangling]** &amp;rarr; **.red[Analysis]** --&gt;
-
-&lt;!-- - Analysis is informed by the .red[data] you have collected... --&gt;
-
-&lt;!-- - ...and the .blue[hypotheses] you have generated --&gt;
-
-&lt;!-- &lt;center&gt;&lt;img src="figs/figure2b.png" width="60%"&gt;&lt;/center&gt; --&gt;
-
----
-
-# .blue[Research] Camp
-
-&lt;ol start = 4&gt;
-
-&lt;li&gt; **.red[Results]** &amp;rarr; **.blue[Conclusion]**
-
-  - Results fall out naturally from the analysis...
-  
-  - ...and must be interpreted in terms of the theory and hypotheses...
-  
-  - ...to draw conclusions
-
-&lt;center&gt;&lt;img src="figs/plot13c.png" width=70%"&gt;&lt;/center&gt;
-
----
-
-# .blue[Research] Camp
-
-&lt;ol start = 4&gt;
-
-&lt;li&gt; **.red[Results]** &amp;rarr; **.blue[Conclusion]**
-
-  - Results fall out naturally from the analysis...
-  
-  - ...and must be interpreted in terms of the theory and hypotheses...
-  
-  - ...to draw conclusions
-
-&lt;center&gt;&lt;img src="figs/plot14c.png" width="60%"&gt;&lt;/center&gt;
-
----
-
-# .blue[Research] Camp
-
-&lt;ol start = 4&gt;
-
-&lt;li&gt; **.red[Results]** &amp;rarr; **.blue[Conclusion]**
-
-  - Results fall out naturally from the analysis...
-  
-  - ...and must be interpreted in terms of the theory and hypotheses...
-  
-  - ...to draw conclusions
-
-&lt;center&gt;&lt;img src="figs/plot15c.png" width="60%"&gt;&lt;/center&gt;
-
----
-
-# The Two Camps
-
-&lt;center&gt;&lt;img src="figs/camps2.png" width="80%"&gt;&lt;/center&gt;
-
-
 ---
 
 # Course Objectives
@@ -620,19 +226,15 @@ background-size: contain
 
 # Learning goals
 
-1. Generate a sophisticated research question based on clearly described assumptions and a narrowly defined hypothesis.
+1. Understand the uses of quantitative data for analyzing sophisticated research questions
 
 --
 
-2. Describe the data used to investigate this research question, including univariate and multivariate visualizations and summary statistics.
+2. Describe data used to investigate research questions, including univariate and multivariate visualizations and summary statistics.
 
 --
 
-3. Apply the appropriate methods to answer the research question and evaluate the hypothesis.
-
---
-
-4. Acknowledge limitations of methods and results, and describe a superior empirical setting that would overcome these limitations.
+3. Apply the appropriate methods to answer research questions and evaluate the hypotheses.
 
 
 ---
@@ -722,23 +324,23 @@ background-size: contain
   
 --
 
-- 4 problem sets (19 points each)
+- 4 problem sets (76 points total)
   
   - 2 extra credit points available each PSet
   
 --
 
-- 100 points: (14 x 2) + (19 x 4)
+- 100 points: (12 x 2) + (19 x 4)
 
 --
 
-- 12 extra credit points available
+- +12 extra credit points available
 
 ---
 
 # Grades: Homework
 
-- Think of these as your readings/practice for each class. Do them!
+- Think of these as your readings/practice for each class. 
 
 --
 
@@ -746,7 +348,7 @@ background-size: contain
 
 --
 
--  Due by midnight on day assigned (no late homework accepted!)
+- Due by midnight on day assigned (no late homework accepted!)
 
 
 ---
@@ -785,8 +387,7 @@ background-size: contain
 
 --
   
-  - ChatGPT: provide a link to your session if you have an account; otherwise, print the output as PDF
-  - Microsoft Copilot: print the output as PDF
+  - Print the output as PDF
   
 ---
 
@@ -895,9 +496,11 @@ background-size: contain
 
 --
 
-  1. Work through psc4175_hw_1.Rmd
+  1. Review course Github page (https://github.com/rweldzius/PSC4175_SUM2025/tree/main)
   
-  2. Create a CampusWire account (PIN: )
+  2. Work through psc4175_hw_1.Rmd (see Github)
+  
+  2. Create a CampusWire account (Link: https://campuswire.com/p/GF9F6AD11. PIN: 3731)
   
   3. Create a Copilot account (https://copilot.microsoft.com/)
     </textarea>
@@ -907,7 +510,8 @@ background-size: contain
   "highlightStyle": "github",
   "highlightLines": true,
   "countIncrementalSlides": false,
-  "slideNumberFormat": "%current%"
+  "slideNumberFormat": "%current%",
+  "ratio": "16:9"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
