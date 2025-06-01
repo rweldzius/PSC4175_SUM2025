@@ -139,11 +139,17 @@ pre {
 
 /* FOOTER */
 
+/*
 .remark-slide-number {
   bottom: 18px;
   opacity: 0.5;
   position: absolute;
   right: 20px;
+}
+*/
+
+.remark-slide-number {
+  display: none;
 }
 
 .footnote {

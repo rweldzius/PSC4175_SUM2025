@@ -19,7 +19,7 @@ output:
       highlightLines: true
       countIncrementalSlides: false
       slideNumberFormat: "%current%"
-      #ratio: "16:9"
+      ratio: "16:9"
 
 ---
 
@@ -43,49 +43,49 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 })
 ```
 
-# Agenda
+<!-- # Agenda -->
 
-1. Getting set up
+<!-- 1. Getting set up -->
 
---
+<!-- -- -->
 
-  - Folder structure + `setwd()`
-  
---
+<!--   - Folder structure + `setwd()` -->
 
-2. Installing software
+<!-- -- -->
 
---
+<!-- 2. Installing software -->
 
-  - [`R: https://cran.r-project.org/`](https://cran.r-project.org/)
-  
---
+<!-- -- -->
 
-  - [`RStudio: https://rstudio.com/products/rstudio/download/`](https://rstudio.com/products/rstudio/download/)
+<!--   - [`R: https://cran.r-project.org/`](https://cran.r-project.org/) -->
 
---
+<!-- -- -->
 
-3. Requiring packages
+<!--   - [`RStudio: https://rstudio.com/products/rstudio/download/`](https://rstudio.com/products/rstudio/download/) -->
 
---
+<!-- -- -->
 
-  - `install.packages("tidyverse")` 
+<!-- 3. Requiring packages -->
 
---
+<!-- -- -->
 
-  - `require(tidyverse)`
-  
---
+<!--   - `install.packages("tidyverse")`  -->
 
-4. Loading and manipulating data
+<!-- -- -->
 
---
+<!--   - `require(tidyverse)` -->
 
-  - `readRDS()`
-  
---
+<!-- -- -->
 
-  - `%>%`
+<!-- 4. Loading and manipulating data -->
+
+<!-- -- -->
+
+<!--   - `readRDS()` -->
+
+<!-- -- -->
+
+<!--   - `%>%` -->
 
 ---
 
@@ -122,33 +122,33 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 
 
 
----
+<!-- --- -->
 
-# Installing software
+<!-- # Installing software -->
 
---
+<!-- -- -->
 
-- [`R: https://cran.r-project.org/`](https://cran.r-project.org/)
+<!-- - [`R: https://cran.r-project.org/`](https://cran.r-project.org/) -->
 
-  - Accept all defaults
-  
---
+<!--   - Accept all defaults -->
 
-- [`RStudio: https://rstudio.com/products/rstudio/download/`](https://rstudio.com/products/rstudio/download/)
+<!-- -- -->
 
-  - Download the version for your OS
-  
---
+<!-- - [`RStudio: https://rstudio.com/products/rstudio/download/`](https://rstudio.com/products/rstudio/download/) -->
 
-- Open `RStudio` and create a new rmarkdown (`.Rmd`) file
+<!--   - Download the version for your OS -->
 
---
+<!-- -- -->
 
-  - Accept defaults, give it a sensible name, delete the default text, then save it to your folder (again with a sensible name)
-  
---
+<!-- - Open `RStudio` and create a new rmarkdown (`.Rmd`) file -->
 
-  - You should follow along with the lecture in this file! Take notes here! Try code here!
+<!-- -- -->
+
+<!--   - Accept defaults, give it a sensible name, delete the default text, then save it to your folder (again with a sensible name) -->
+
+<!-- -- -->
+
+<!--   - You should follow along with the lecture in this file! Take notes here! Try code here! -->
 
 ---
 
@@ -220,6 +220,8 @@ This is plain text.
 2+2
 ```
 ````
+
+
 
 --
 
@@ -374,37 +376,37 @@ a_function(x = a_list[['element3']])
 a_function(x = a_list$element3)
 ```
 
----
+<!-- --- -->
 
-# How `RStudio` Works
+<!-- # How `RStudio` Works -->
 
---
+<!-- -- -->
 
-- `RStudio` is a powerful way to interact with `R`
+<!-- - `RStudio` is a powerful way to interact with `R` -->
 
---
+<!-- -- -->
 
-- In base `R`, you interact with the program via the "command line"
+<!-- - In base `R`, you interact with the program via the "command line" -->
 
---
+<!-- -- -->
 
-  - For example...
-  
---
+<!--   - For example... -->
 
-- But to save your work, you can write "scripts"
+<!-- -- -->
 
---
+<!-- - But to save your work, you can write "scripts" -->
 
-  - For example...
-  
---
+<!-- -- -->
 
-- *This is all cumbersome!*
+<!--   - For example... -->
 
---
+<!-- -- -->
 
-- Enter, `RStudio`
+<!-- - *This is all cumbersome!* -->
+
+<!-- -- -->
+
+<!-- - Enter, `RStudio` -->
 
 ---
 
@@ -612,7 +614,7 @@ df<-read_rds("https://github.com/rweldzius/PSC4175_SUM2025/raw/main/Data/sc_debt
 
 --
 
-  - url: https://github.com/rweldzius/PSC4175_F2024/raw/main/Data/sc_debt.Rds
+  - url: https://github.com/rweldzius/PSC4175_SUM20256/raw/main/Data/sc_debt.Rds
 ---
 
 # Loading Data

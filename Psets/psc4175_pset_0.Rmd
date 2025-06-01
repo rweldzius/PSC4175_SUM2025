@@ -1,12 +1,24 @@
 ---
+title: "Problem Set 0"
+subtitle: "Practice (not graded)"
+author: "[YOUR NAME]"
+institute: "Villanova University"
+date: "Due Date: 2025-05-30"
 output:
-  pdf_document: default
   html_document: default
 ---
 
+```{r,include=F}
+knitr::opts_chunk$set(error=TRUE)
+```
+
+At the top of all problem sets I will have the following statement. You should follow the statement with the names of classmates with whom you worked and/or upload a PDF of your AI prompt/output.
+
+**If you collaborated with a colleague and/or used AI for any help on this problem set, document here.** Write the names of your classmates and/or upload a PDF of your AI prompt and output with your problem set:
+
 ##  Problem Set 0: Getting Set Up!
 
-The rest of the semester will see you working on data science questions using `R`. As such, your first homework assignment is:
+The rest of the semester will see you working on data science questions using `R`. As such, your first problem set will have you:
 
 1. Install `R` on your computer.
 2. Install `RStudio` on your computer.
