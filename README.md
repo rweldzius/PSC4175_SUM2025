@@ -155,7 +155,7 @@ Villanova University makes every reasonable effort to allow members of the commu
 | 6/10/25 | Uncertainty 2 | Confidence statements | Video <br/> Slides | HW 8 | |
 | 6/11/25 | Regression 1 | Interpreting output and evaluating model | Video <br/> Slides | HW 9 | |
 | 6/12/25 | Regression 2 | Multiple regression, categorical Xs | Video <br/> Slides | HW 10 | |
-| 6/13/25 | No lecture |  | |  | PSet 2  |
+| 6/13/25 | No lecture |  | |  | [PS 2](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Psets/psc4175_pset_2.Rmd)  |
 | 6/16/25 | Classification 1 | The concept of logistic regression | Video <br/> Slides | HW 11 | |
 | 6/17/25 | Classification 2 | Interpreting output and evaluating model |Video <br/> Slides | HW 12 | |
 | 6/18/25 | Clustering | k-means clustering | Video <br/> Slides | HW 13 | |
