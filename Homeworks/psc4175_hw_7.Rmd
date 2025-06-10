@@ -1,6 +1,6 @@
 ---
 title: "Confidence and Uncertainty"
-subtitle: "Homework"
+subtitle: "Homework 7"
 author: "Prof. Weldzius"
 institute: "Villanova University"
 date: "Due Date: 2025-06-09"

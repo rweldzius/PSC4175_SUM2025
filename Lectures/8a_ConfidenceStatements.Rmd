@@ -1,0 +1,294 @@
+---
+title: "Uncertainty Part 2a"
+subtitle: "Sports Analytic Mania: Basics"
+author: "Prof. Weldzius"
+institute: "Villanova University"
+# date: "Slides Updated: `r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    # self_contained: true
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css:
+      - default
+      - css/lexis.css
+      - css/lexis-fonts.css
+    #seal: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: "%current%"
+      ratio: "16:9"
+
+---
+
+```{css,echo = F}
+.small .remark-code { /*Change made here*/
+  font-size: 85% !important;
+}
+.tiny .remark-code { /*Change made here*/
+  font-size: 50% !important;
+}
+```
+
+```{r,include=F}
+set.seed(123)
+options(width=60)
+knitr::opts_chunk$set(fig.align='center',fig.width=9,fig.height=5,message=F,warning=F)
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+```
+
+# Agenda
+
+1. Uncertainty
+
+2. More NBA data
+
+3. \#TrustTheProcess
+
+4. Conditional Means
+
+---
+
+# Sports Analytics
+
+- Previously, we looked at players
+
+--
+
+  - Specifically, `isRookie` and `tov`
+  
+  - But could try **many** other ideas
+  
+--
+
+- Useful if we want a job scouting talent
+
+- But what if we want to advise actual games?
+
+--
+
+  - **Game Data**!
+
+---
+
+# Other NBA Data
+
+--
+
+- Load the `game_summary.Rds` data
+
+```{r,message=F,warning=F}
+require(tidyverse)
+gms <- read_rds('../data/game_summary.Rds')
+gms
+```
+
+---
+
+# Other NBA Data
+
+- Contains data on every game played between 2016 and 2019
+
+--
+
+```{r,fig.width=9,fig.height=5}
+gms %>%
+  ggplot(aes(x = dateGame)) +
+  geom_bar(stat = 'count')
+```
+
+---
+
+# Other NBA Data
+
+- Contains data on every game played between 2016 and 2019
+
+```{r, fig.keep='none'}
+gms %>%
+  ggplot(aes(x = dateGame)) +
+  geom_bar(stat = 'count')
+```
+
+- *Pause*: What happens when you keep `geom_bar()` blank? What about `geom_bar(stat = 'identity)`?
+
+---
+
+# Other NBA Data
+
+```{r}
+glimpse(gms)
+```
+
+---
+
+# Codebook
+
+| Name         |                                          Description |
+|--------------|-----------------------------------------------------:|
+| idGame       |                                       Unique game id |
+| yearSeason   | Which season? NBA uses ending year so 2016-17 = 2017 |
+| dateGame     |                                     Date of the game |
+| idTeam       |                                       Unique team id |
+| nameTeam     |                                            Team Name |
+| locationGame |                        Game location, H=Home, A=Away |
+| tov          |                                      Total turnovers |
+| pts          |                                         Total points |
+| treb         |                                       Total rebounds |
+| pctFG        |                                Field Goal Percentage |
+| teamrest     |               How many days since last game for team |
+| pctFT        |                                Free throw percentage |
+| isWin        |                                   Won? TRUE or FALSE |
+| ft_80        |      Team scored more than 80 percent of free throws |
+
+---
+
+# Codebook
+
+--
+
+- Which of these are categorical? Which are continuous?
+
+--
+
+  - Remember the **process**!
+  
+--
+
+- `isWin` as an ordered binary
+
+```{r}
+gms %>%
+  count(isWin)
+```
+
+---
+
+# Codebook
+
+- The same number for wins and losses?
+  
+```{r}
+gms %>%
+  select(idGame,nameTeam,dateGame,locationGame,isWin) %>% head()
+```
+
+--
+
+- Each row is a **team-game** pair
+
+--
+
+  - i.e., the Cavs hosted the Knicks on October 25, 2016 and won!
+  
+---
+
+# The Knicks
+
+<center><img src="https://miro.medium.com/max/1215/1*SeZTaMMhZbrG6zV5wTzLqg.gif" width = 70%></center>
+
+---
+
+# .blue[Science]
+
+--
+
+- What predicts winning?
+
+--
+
+  - Points? (more is better)
+  - Turnovers? (less is better)
+  - Rebounds? (more is better)
+  
+--
+
+- How confident are we?
+
+```{r}
+gms %>%
+  group_by(isWin) %>%
+  summarise(avgTO = mean(tov))
+```
+
+---
+
+# Turnovers and Winning
+
+--
+
+- On average, winning teams have ~1 fewer turnover than losing teams
+
+--
+
+- FSNoR: is this *always* the case?
+
+```{r}
+gms %>%
+  filter(yearSeason == 2017) %>%
+  group_by(isWin) %>%
+  summarise(avgTO = mean(tov))
+```
+
+---
+
+# Turnovers and Winning
+
+- On average, winning teams have ~1 fewer turnover than losing teams
+
+- FSNoR: is this *always* the case?
+
+```{r}
+gms %>%
+  filter(yearSeason == 2018) %>%
+  group_by(isWin) %>%
+  summarise(avgTO = mean(tov))
+```
+
+---
+
+# Turnovers and Winning
+
+- On average, winning teams have ~1 fewer turnover than losing teams
+
+- FSNoR: is this *always* the case?
+
+```{r}
+gms %>%
+  group_by(isWin,yearSeason) %>%
+  summarise(avgTO = mean(tov)) %>%
+  spread(isWin,avgTO,sep = '_')
+```
+
+
+---
+
+# Turnovers and Winning
+
+- On average, winning teams have ~1 fewer turnover than losing teams
+
+- FSNoR: is this *always* the case?
+
+--
+
+  - Not literally (numbers change)
+
+--
+
+  - But practically?
+  
+- How **confident** are we in making this claim?
+
+--
+
+  - In each season, the average turnovers of winning teams are roughly 1 lower than the average turnovers of losing teams
+  
+--
+
+  - Use **bootstrap sampling** to express this more concretely!
+  
