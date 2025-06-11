@@ -1,0 +1,533 @@
+---
+title: "Regression"
+subtitle: "Part 1a"
+author: "Prof. Weldzius"
+institute: "Villanova University"
+# date: "Slides Updated: `r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    # self_contained: true
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css:
+      - default
+      - css/lexis.css
+      - css/lexis-fonts.css
+    #seal: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: "%current%"
+      ratio: "16:9"
+
+---
+
+```{css,echo = F}
+.small .remark-code { /*Change made here*/
+  font-size: 85% !important;
+}
+.tiny .remark-code { /*Change made here*/
+  font-size: 50% !important;
+}
+```
+
+```{r,include=F}
+set.seed(123)
+options(width=60)
+knitr::opts_chunk$set(fig.align='center',fig.width=9,fig.height=5,message=F,warning=F)
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+```
+
+# Agenda
+
+1. Modeling Conditional Variation
+
+2. Adding Regression to the **Process**
+
+3. Next time: Demonstrating Regressions
+
+---
+
+# Regression & Conditional Analysis
+
+--
+
+- Recall our discussion of **conditional** analysis
+
+--
+
+  - Conditional &rarr; **depends on**
+  
+--
+
+  - Analyze with **conditional means**
+  
+---
+
+# Reminder of the **Process**
+
+--
+
+1. Determine variable **type**
+
+--
+
+  - I.e., categorical (ordered, unordered, binary) or continuous
+  
+  - In `R` terms: `chr`, `fct` for categorical, `dbl` for continuous
+  
+--
+
+2. Type informs **univariate analysis**
+
+--
+
+  - I.e., histograms for continuous, barplots for categorical
+  
+--
+
+3. Combination of types informs **conditional analysis**
+
+--
+
+  - Categorical X Categorical: proportions by categories (`geom_bar`)
+  
+  - Binary X Continuous: histograms by categories (`geom_histogram` / `geom_density`)
+  
+  - Categorical X Continuous: distributions by categories (`geom_boxplot` / `geom_violin`)
+  
+  - Continuous X Continuous: scatter plots (`geom_point`)
+  
+---
+
+# What is regression?
+
+--
+
+- Conditional means for continuous data
+
+--
+
+<center><img src="figs/condmean.png" height=440px width=380px></center>
+
+---
+
+# What is regression?
+
+- People with hourly wages < $20 spend ~$50 on entertainment per week
+
+<center><img src="figs/condmean.png" height=440px width=380px></center>
+
+---
+
+# What is regression?
+
+- People with hourly wages > $40 spend ~$95 on entertainment per week
+
+<center><img src="figs/condmean.png" height=440px width=380px></center>
+
+---
+
+# What is regression?
+
+- .blue[Theory]: the more you earn, the more you spend
+
+<center><img src="figs/condmean.png" height=440px width=380px></center>
+
+---
+
+# What is regression?
+
+- But **conditional means** make a lot of mistakes. Can we do better?
+
+<center><img src="figs/condmean.png" height=440px width=380px></center>
+
+
+---
+
+# What is regression?
+
+- But **conditional means** make a lot of mistakes. Can we do better?
+
+<center><img src="figs/condmean_reg.png" height=440px width=380px></center>
+
+
+---
+
+# Regression
+
+--
+
+- Calculating a **line** that minimizes mistakes *for every observation*
+
+--
+
+  - NB: could be a curvey line! For now, just assume straight
+  
+--
+
+- Recall from geometry how to graph a straight line
+
+--
+
+- $Y = a + bX$
+
+  - $a$: the "intercept" (where the line intercepts the y-axis)
+  - $b$: the "slope" (how much $Y$ changes for each increase in $X$)
+
+--
+
+- (Data scientists use $\alpha$ and $\beta$ instead of $a$ and $b$ b/c nerds)
+
+--
+
+- Regression analysis simply chooses the best line
+
+--
+
+  - "Best"?
+
+--
+
+  - The line that minimizes the mistakes (the **line of best fit**)
+
+---
+
+# Linear Regression
+
+```{r,message=F,warning=F,echo=F}
+set.seed(123)
+require(tidyverse)
+
+X <- rnorm(9)
+Y <- .5 + .5*X + rnorm(9)
+p <- data.frame(X = X,Y = Y) %>%
+  ggplot(aes(x = X,y = Y)) + 
+  geom_point(size = 3) + 
+  geom_vline(xintercept = 0,linetype = 'dashed') + 
+  geom_hline(yintercept = 0,linetype = 'dashed') + 
+  theme_void() + 
+  lims(x = c(-3,3),y = c(-3,3))
+
+ggsave(plot = p,filename = paste0('./scaffolding/regPlotFirst_0.png'),device = 'png',width = 4,height = 4)
+```
+
+.leftcol[
+
+<center><img src="./scaffolding/regPlotFirst_0.png" width = 100%></center>
+
+]
+
+.rightcol[
+
+
+]
+
+---
+
+# Linear Regression
+
+```{r,message=F,warning=F,echo=F}
+p <- data.frame(X = X,Y = Y) %>%
+  ggplot(aes(x = X,y = Y)) + 
+  geom_point(size = 3) + 
+  geom_vline(xintercept = 0,linetype = 'dashed') + 
+  geom_hline(yintercept = 0,linetype = 'dashed') + 
+  theme_void() +
+  geom_abline(intercept = 0,slope = 1,color = 'blue',size = 2) + 
+  lims(x = c(-3,3),y = c(-3,3)) + 
+  # annotate(geom = 'rect',xmin = -.5,ymin = .5,xmax = .5,ymax = 1) + 
+  annotate(geom = 'label',x = 0,y = Inf,label = list(bquote(alpha==0~'; '~beta==1)),vjust = 2.1,parse = T)
+ggsave(plot = p,filename = paste0('./figs/regPlotFirst_1.png'),device = 'png',width = 4,height = 4)
+```
+
+.leftcol[
+
+<center><img src="./figs/regPlotFirst_1.png" width = 100%></center>
+
+]
+
+.rightcol[
+
+
+]
+---
+
+# Linear Regression
+
+```{r,message=F,warning=F,echo=F}
+p <- data.frame(X = X,Y = Y) %>%
+  ggplot(aes(x = X,y = Y)) + 
+  geom_segment(x = X[1],y = Y[1],xend = X[1],yend = X[1],color = 'red',size = 1.5) + 
+  geom_point(size = 3) + 
+  geom_vline(xintercept = 0,linetype = 'dashed') + 
+  geom_hline(yintercept = 0,linetype = 'dashed') + 
+  theme_void() + 
+  geom_abline(intercept = 0,slope = 1,color = 'blue',size = 2) + 
+  annotate(geom = 'text',x = X[1],y = Y[1],hjust = 2.1,vjust = 1.5,label = bquote(u[i]),color = 'red') + 
+  lims(x = c(-3,3),y = c(-3,3)) + 
+    annotate(geom = 'label',x = 0,y = Inf,label = list(bquote(alpha==0~'; '~beta==1)),vjust = 2.1,parse = T)
+ggsave(plot = p,filename = paste0('./figs/regPlotFirst_2.png'),device = 'png',width = 4,height = 4)
+```
+
+.leftcol[
+
+<center><img src="./figs/regPlotFirst_2.png" width = 100%></center>
+
+]
+
+.rightcol[
+
+- **Error/Residual**: mistake made by a line
+
+  - In math: $u_i = y_i - \hat{y}_i$
+  
+  - In English: difference between true outcome value ( $y_i$ ) and prediction ( $\hat{y}_i$ )
+
+]
+
+---
+
+# Linear Regression
+
+```{r,message=F,warning=F,echo=F}
+RMSE <- sqrt(mean((Y - (X*1 + 0))^2))
+p <- data.frame(X = X,Y = Y) %>%
+  ggplot(aes(x = X,y = Y)) + 
+  geom_segment(x = X,y = Y,xend = X,yend = X,color = 'red',size = 1.5) + 
+  geom_point(size = 3) + 
+  geom_vline(xintercept = 0,linetype = 'dashed') + 
+  geom_hline(yintercept = 0,linetype = 'dashed') + 
+  theme_void() + 
+  geom_abline(intercept = 0,slope = 1,color = 'blue',size = 2) + 
+  lims(x = c(-3,3),y = c(-3,3)) + 
+  annotate(geom = 'label',x = 0,y = Inf,label = list(bquote(alpha==0~'; '~beta==1)),vjust = 2.1,parse = T)
+ggsave(plot = p,filename = paste0('./figs/regPlotFirst_3.png'),device = 'png',width = 4,height = 4)
+```
+
+.leftcol[
+
+<center><img src="./figs/regPlotFirst_3.png" width = 100%></center>
+
+]
+
+.rightcol[
+
+- Use **errors** to find **line of best fit**
+
+- **RMSE** (**R**oot **M**ean **S**quared **E**rror)
+
+  - Square the errors
+  
+  - Take their average
+  
+  - Take the square root
+  
+- **RMSE** = `r round(RMSE,2)`
+
+]
+
+---
+
+# Linear Regression
+
+```{r,message=F,warning=F,echo=F}
+a <- 1
+b <- -.5
+RMSE <- sqrt(mean((Y - (X*b + a))^2))
+p <- data.frame(X = X,Y = Y) %>%
+  ggplot(aes(x = X,y = Y)) + 
+  geom_segment(x = X,y = Y,xend = X,yend = X*b+a,color = 'red',size = 1.5) + 
+  geom_point(size = 3) + 
+  geom_vline(xintercept = 0,linetype = 'dashed') + 
+  geom_hline(yintercept = 0,linetype = 'dashed') + 
+  theme_void() + 
+  geom_abline(intercept = a,slope = b,color = 'blue',size = 2) + 
+  lims(x = c(-3,3),y = c(-3,3)) + 
+  annotate(geom = 'label',x = 0,y = Inf,label = list(bquote(alpha==.(a)~'; '~beta==.(b)~'; '~RMSE==.(round(RMSE,2)))),vjust = 2.1,parse = T)
+ggsave(plot = p,filename = paste0('./figs/regPlotFirst_4.png'),device = 'png',width = 4,height = 4)
+```
+
+.leftcol[
+
+<center><img src="./figs/regPlotFirst_4.png" width = 100%></center>
+
+]
+
+.rightcol[
+
+- Use **errors** to find **line of best fit**
+
+- **RMSE** (**R**oot **M**ean **S**quared **E**rror)
+
+  - Square the errors
+  
+  - Take their average
+  
+  - Take the square root
+  
+- **RMSE** = `r round(RMSE,2)`
+
+]
+
+---
+
+# Linear Regression
+
+```{r,message=F,warning=F,echo=F}
+a <- -1
+b <- 2
+RMSE <- sqrt(mean((Y - (X*b + a))^2))
+p <- data.frame(X = X,Y = Y) %>%
+  ggplot(aes(x = X,y = Y)) + 
+  geom_segment(x = X,y = Y,xend = X,yend = X*b+a,color = 'red',size = 1.5) + 
+  geom_point(size = 3) + 
+  geom_vline(xintercept = 0,linetype = 'dashed') + 
+  geom_hline(yintercept = 0,linetype = 'dashed') + 
+  theme_void() + 
+  geom_abline(intercept = a,slope = b,color = 'blue',size = 2) + 
+  lims(x = c(-3,3),y = c(-3,3)) + 
+  annotate(geom = 'label',x = 0,y = Inf,label = list(bquote(alpha==.(a)~'; '~beta==.(b)~'; '~RMSE==.(round(RMSE,2)))),vjust = 2.1,parse = T)
+ggsave(plot = p,filename = paste0('./figs/regPlotFirst_5.png'),device = 'png',width = 4,height = 4)
+```
+
+.leftcol[
+
+<center><img src="./figs/regPlotFirst_5.png" width = 100%></center>
+
+]
+
+.rightcol[
+
+- Use **errors** to find **line of best fit**
+
+- **RMSE** (**R**oot **M**ean **S**quared **E**rror)
+
+  - Square the errors
+  
+  - Take their average
+  
+  - Take the square root
+  
+- **RMSE** = `r round(RMSE,2)`
+
+]
+
+
+---
+
+# Linear Regression
+
+```{r,message=F,warning=F,echo=F}
+a <- .5
+b <- .5
+RMSE <- sqrt(mean((Y - (X*b + a))^2))
+p <- data.frame(X = X,Y = Y) %>%
+  ggplot(aes(x = X,y = Y)) + 
+  geom_segment(x = X,y = Y,xend = X,yend = X*b+a,color = 'red',size = 1.5) + 
+  geom_point(size = 3) + 
+  geom_vline(xintercept = 0,linetype = 'dashed') + 
+  geom_hline(yintercept = 0,linetype = 'dashed') + 
+  theme_void() + 
+  geom_abline(intercept = a,slope = b,color = 'blue',size = 2) + 
+  lims(x = c(-3,3),y = c(-3,3)) + 
+  annotate(geom = 'label',x = 0,y = Inf,label = list(bquote(alpha==.(a)~'; '~beta==.(b)~'; '~RMSE==.(round(RMSE,2)))),vjust = 2.1,parse = T)
+ggsave(plot = p,filename = paste0('./figs/regPlotFirst_6.png'),device = 'png',width = 4,height = 4)
+```
+
+.leftcol[
+
+<center><img src="./figs/regPlotFirst_6.png" width = 100%></center>
+
+]
+
+.rightcol[
+
+- Use **errors** to find **line of best fit**
+
+- **RMSE** (**R**oot **M**ean **S**quared **E**rror)
+
+  - Square the errors
+  
+  - Take their average
+  
+  - Take the square root
+  
+- **RMSE** = `r round(RMSE,2)`
+
+]
+
+---
+
+# Visual Intuition
+
+<center><img src="./figs/raw.png" width = 75%></center>
+
+
+---
+
+# Visual Intuition
+
+<center><img src="./figs/regression-line.gif" width = 75%></center>
+
+---
+
+# Regression
+
+--
+
+- The line is .blue[substantively meaningful]
+
+--
+
+- Red line on scatter plot of spending and wages: $Y = 12 + 2*X$
+
+--
+
+- $\alpha$ tells us the value of $Y$ when $X$ is zero
+
+--
+
+  - People who don't make any money spend $12 per week on entertainment
+  
+--
+
+- $\beta$ tells us how much $Y$ increases for each additional $X$
+
+--
+
+  - People spend an additional $2 per week for each additional $1 in hourly wages
+  
+---
+
+# Regression
+
+- These are called **"linear models"**
+
+--
+
+  - **Not** because the line is straight (it might not be)
+  
+  - but because the components are additive ( $\alpha + \beta X$ )
+  
+--
+
+- Can extend to multiple predictors ( $X$ 's)
+
+--
+
+  - $Y = \alpha + \beta_1 X_1 + \beta_2 X_2 + \dots + \varepsilon$
+  
+--
+
+  - $X_1$ might be wages and $X_2$ might be age (for example)
+  
+--
+
+  - The final term $\varepsilon$ measures how bad our mistakes are
+  
