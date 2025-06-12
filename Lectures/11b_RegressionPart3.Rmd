@@ -1,0 +1,300 @@
+---
+title: "Regression"
+subtitle: "Part 3b"
+author: "Prof. Weldzius"
+institute: "Villanova University"
+# date: "Slides Updated: `r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    # self_contained: true
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css:
+      - default
+      - css/lexis.css
+      - css/lexis-fonts.css
+    #seal: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: "%current%"
+      ratio: "16:9"
+
+---
+
+```{css,echo = F}
+.small .remark-code { /*Change made here*/
+  font-size: 85% !important;
+}
+.tiny .remark-code { /*Change made here*/
+  font-size: 50% !important;
+}
+```
+
+```{r,include=F}
+set.seed(123)
+options(width=60)
+knitr::opts_chunk$set(fig.align='center',fig.width=9,fig.height=5,message=F,warning=F)
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+```
+
+# Agenda
+
+1. Categorical Predictors
+
+---
+
+# Recap of Movie Analysis
+
+```{r,message=F,warning=F}
+require(tidyverse)
+mv <- read_rds('../data/mv.Rds') %>%
+  mutate(gross_log = log(gross),
+         budget_log = log(budget))
+```
+
+- .blue[Theory]: the more a movie costs, the more it should make
+
+- $X$: log(budget)
+
+- $Y$: log(gross)
+
+---
+
+# Categorical Data
+
+--
+
+- Thus far, only using continuous variables
+
+--
+
+- But we can do regression with categorical data too!
+
+--
+
+- The Bechdel Test: 3 questions of a movie
+
+--
+
+  1. Does it have two women in it?
+  2. Who talk to each other?
+  3. About something other than a man?
+  
+```{r}
+mv %>%
+  count(bechdel_score)
+```
+
+---
+
+# Research Question
+
+--
+
+- .blue[Do movies that pass the Bechdel Test make more money?]
+
+--
+
+  - .blue[Theory:] Women are ~50% of the population. Movies that pass the test are more appealing to women.
+  
+--
+
+  - .blue[Hypothesis:] Movies that pass the test make more money.
+  
+--
+
+- .red[Wrangling:] Let's turn the `bechdel_score` variable into a binary
+
+```{r}
+mv <- mv %>%
+  mutate(bechdel_bin = ifelse(bechdel_score == 3,1,0)) %>%
+  mutate(bechdel_factor=recode_factor(bechdel_bin,
+                                      `1`="Pass",
+                                      `0`="Fail",
+                                      ))
+```
+
+---
+
+# Regression
+
+--
+
+- We can add the binary factor to our regression
+
+```{r}
+summary(lm(gross_log ~ bechdel_factor,mv))
+```
+
+---
+
+# Regression
+
+- Coefficient is positive
+
+--
+
+- What is the interpretation?
+
+--
+
+  - Movies that fail make more money...
+  
+--
+
+  - ...than what?
+  
+--
+
+  - Movies that pass the Bechdel Test
+  
+--
+
+- Categorical variables are **always interpreted in relation to the hold-out category**!
+
+---
+
+# Regression
+
+- Movies that fail the test make more money!?
+
+--
+
+- **REMEMBER**: Correlation $\neq$ causation
+
+--
+
+  - What might explain this pattern?
+  
+--
+
+  - Budgets in a sexist Hollywood!
+  
+--
+
+  - Movies that fail the test get larger budgets
+  
+--
+
+  - Budgets are positively associated with gross
+  
+--
+
+- So we want to "control" for budget by adding it to our regression
+
+```{r}
+mBechCtrl <- lm(gross_log ~ budget_log + bechdel_factor,mv)
+```
+
+---
+
+# Regression
+
+```{r}
+summary(mBechCtrl)
+```
+
+---
+
+# Regression
+
+- Our hypothesis is supported!
+
+--
+
+- What about non-binary categorical variables?
+
+```{r}
+mv %>%
+  count(rating)
+```
+
+---
+
+# Categorical
+
+- Let's first remove rarely-occurring ratings
+
+```{r}
+mvAnalysis <- mv %>%
+  filter(!rating %in% c('Approved','TV-14','TV-MA','TV-PG','X'))
+```
+
+---
+
+# Categorical
+
+```{r}
+summary(lm(gross_log ~ rating,mvAnalysis))
+```
+
+---
+
+# Categorical
+
+- Everything makes less money than the hold-out category!
+
+--
+
+  - "G"-rated movies are powered by children
+  
+--
+
+- What if we wanted to compare to a different reference category?
+
+```{r}
+mvAnalysis <- mvAnalysis %>%
+  mutate(rating = factor(rating,
+                         levels = c('R','PG-13','PG','G','Not Rated')))
+
+mRating2 <- lm(gross_log ~ rating,mvAnalysis)
+```
+
+---
+
+# Categorical
+
+```{r}
+summary(mRating2)
+```
+
+---
+
+# Cross Validation
+
+- This is why `sample_n()` is useful
+
+```{r,warning = F}
+set.seed(123)
+rmseRes_rating <- NULL
+for(i in 1:100) {
+  train <- mvAnalysis %>%
+    group_by(rating) %>%
+    sample_n(size = round(n()*.8),replace = F)
+  test <- mvAnalysis %>% anti_join(train)
+  
+  m <- lm(gross_log ~ rating,train)
+  rmseRes_rating <- test %>%
+    mutate(preds = predict(m,newdata = test)) %>%
+    summarise(rmse = sqrt(mean((gross_log - preds)^2,na.rm=T))) %>%
+    bind_rows(rmseRes_rating)
+}
+rmseRes_rating %>% summarise(rmse = mean(rmse)) #<<
+```
+
+---
+
+# Categorical Analysis Practice
+
+- Change the hold-out category to `Not Rated`, run the regression, and cross-validate the results. 
+
+```{r}
+# INSERT CODE HERE
+```
+

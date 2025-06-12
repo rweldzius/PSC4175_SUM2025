@@ -323,7 +323,7 @@ pFancy
 
 # Look with `plotly` to see outliers
 
-```{r,warning=F,message=F}
+```{r,warning=F,message=F,fig.height=6, fig.width=12}
 require(plotly)
 ggplotly(pFancy,tooltip = 'text')
 ```
@@ -369,6 +369,8 @@ $gross\_log = 1.26 + 0.96 * budget\_log$
 
 # Interpreting with Logs
 
+--
+
 - Previously, we said:
 
   - $\alpha$ is the value of $Y$ when $X$ is zero
@@ -376,8 +378,10 @@ $gross\_log = 1.26 + 0.96 * budget\_log$
   - We need to convert back out of logged values using the `exp()` function
   
   - When `budget_log` is zero, the budget is `exp(0)` or $1
+  
+--
 
-- Thus, we say when the budget is \$1, the movie makes 1.26 logged dollars, or $3.53
+- Thus, we say: when the budget is $1, the movie makes 1.26 logged dollars, or...
 
 ```{r}
 exp(1.26107)

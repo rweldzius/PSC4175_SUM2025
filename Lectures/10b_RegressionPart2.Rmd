@@ -1,0 +1,612 @@
+---
+title: "Regression"
+subtitle: "Part 2b"
+author: "Prof. Weldzius"
+institute: "Villanova University"
+# date: "Slides Updated: `r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    # self_contained: true
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css:
+      - default
+      - css/lexis.css
+      - css/lexis-fonts.css
+    #seal: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: "%current%"
+      ratio: "16:9"
+
+---
+
+```{css,echo = F}
+.small .remark-code { /*Change made here*/
+  font-size: 85% !important;
+}
+.tiny .remark-code { /*Change made here*/
+  font-size: 50% !important;
+}
+```
+
+```{r,include=F}
+set.seed(123)
+options(width=60)
+knitr::opts_chunk$set(fig.align='center',fig.width=9,fig.height=5,message=F,warning=F)
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+```
+
+# Learning Goals
+
+1. Evaluating a regression: Univariate and multivariate visualization of errors
+
+3. Root Mean Squared Error (RMSE)
+
+4. Cross Validation
+
+---
+
+# Remember where we left off last time
+
+```{r,message=F,warning=F,echo=F,include=F}
+require(tidyverse)
+
+mv <- read_rds('../data/mv.Rds') %>%
+  mutate(gross_log = log(gross),
+         budget_log = log(budget))
+```
+
+```{r}
+m <- lm(gross_log ~ budget_log,data = mv)
+summary(m)
+```
+
+
+---
+
+# Evaluation
+
+--
+
+- Every regression line makes mistakes
+
+  - If they didn't, they wouldn't be good at **reducing complexity**!
+
+--
+
+- How bad do ours look?
+
+  - How should we begin to answer this question!?
+  
+--
+
+- Are there patterns to the mistakes?
+
+  - We **overestimate** gross for movies that cost between $1m and $10m
+
+  - These are the "indies"
+  
+--
+
+  - We also **underestimate** gross to the "blockbusters"
+  
+--
+
+- Why?
+
+---
+
+# Understanding Regression Lines
+
+- Regression lines choose $\alpha$ and $\beta$ to minimize mistakes
+
+  - Mistakes (aka "errors" or "residuals") are captured in the $\varepsilon$ term
+  
+--
+
+  - We can apply the **process** to these!
+  
+```{r}
+# Wrangle data to drop missingness!
+mv_analysis <- mv %>% drop_na(gross_log,budget_log)
+
+m <- lm(gross_log ~ budget_log,data = mv_analysis)
+
+mv_analysis$predictions <- predict(m)
+
+mv_analysis$errors <- mv_analysis$gross_log - mv_analysis$predictions
+
+summary(mv_analysis$errors)
+```
+
+---
+
+# Univariate Viz of Errors
+
+```{r,message = F}
+mv_analysis %>%
+  ggplot(aes(x = errors)) + 
+  geom_histogram() + 
+  labs(x = 'Errors: Gross - Predicted',y = 'Number of movies')
+```
+
+---
+
+# Univariate Viz of Errors
+
+- Note that they are on average zero
+
+--
+
+  - Don't feel too proud! Mean 0 error is baked into the method
+
+  - More concerned about **skew**...there is evidence of overestimating
+  
+--
+
+- Can we do more? **Conditional Analysis**
+
+  - Conditional on the **predictor** (the $X$ variable)
+  
+---
+
+# Multivariate Viz of Errors
+
+- Ideal is where errors are unrelated to predictor
+
+--
+
+  - This **should** appear as a rectangular cloud of points around zero
+
+```{r,echo=F,message=F,warning=F}
+X <- rnorm(1000)
+Y <- 2*X + rnorm(1000)
+
+m <- lm(Y~X)
+
+e <- Y - predict(m)
+
+pIdeal <- data.frame(X = X,
+           e = e) %>%
+ggplot(aes(x = X,y = e)) + 
+  geom_point() + 
+  geom_hline(yintercept = 0,linetype = 'dashed') + 
+  geom_smooth() + 
+  labs(x = 'X variable',
+       y = 'Errors')
+```
+
+```{r,warning=F,message=F}
+pIdeal
+```
+
+
+---
+
+# Multivariate Viz of Errors
+
+- This is not the case for us!
+
+```{r,message = F}
+mv_analysis %>%
+  ggplot(aes(x = budget,y = errors)) + geom_smooth() + geom_point() +
+  geom_hline(yintercept = 0,linetype = 'dashed') + scale_x_log10(label = scales::dollar) 
+```
+
+---
+
+# Multivariate Viz of Errors
+
+- Evidence of a U-shape &rarr; underpredict low and high budgets, overpredict middle budgets
+
+- Ergo, our model is **not great**!
+
+--
+
+  - Could add additional predictors $X_2$, $X_3$, etc.
+  
+  - Next lecture!
+
+---
+
+# RMSE
+
+- Univariate / Multivariate visualization of errors is **important**
+
+- But we want to summarize model quality in a simpler way
+
+--
+
+- **RMSE**: summarizes model performance with a *single number*
+
+  - Useful for comparing multiple models to each other
+
+
+---
+
+# RMSE
+
+- **E**rror ( $\varepsilon$ ): actual outcome ( $Y_i$ ) - predicted outcome ( $\hat{Y}_i$ )
+
+  - The "distance" between the data and the model
+  
+--
+
+- **S**quared: $\varepsilon^2$
+
+  1. Makes all values positive
+  
+  2. .blue[Exaggerates] the presence of larger errors
+  
+--
+
+- **M**ean: average these squared errors
+
+- **R**oot: take their square root (.blue[un-exaggerate])
+
+$$RMSE = \sqrt{\frac{1}{n}\sum_{i = 1}^n(Y_i - \hat{Y}_i)^2}$$
+
+---
+
+# RMSE
+
+- **.red[E]**.red[rror] ( ${\color{red}\varepsilon}$ ): actual outcome ( $Y_i$ ) - predicted outcome ( $\hat{Y}_i$ )
+
+  - The "distance" between the data and the model
+
+- **S**quared: $\varepsilon^2$
+
+  1. Makes all values positive
+  
+  2. Exaggerates the presence of larger errors
+
+- **M**ean: average these squared errors
+
+- **R**oot: take their square root (un-exaggerate)
+
+$$RMS{\color{red}E} = \sqrt{\frac{1}{n}\sum_{i = 1}^n(\underbrace{Y_i - \hat{Y}_i}_{\varepsilon})^2}$$
+
+
+---
+
+# RMSE
+
+- **E**rror ( $\varepsilon$ ): actual outcome ( $Y_i$ ) - predicted outcome ( $\hat{Y}_i$ )
+
+  - The "distance" between the data and the model
+
+- **.red[S]**.red[quared:] $\varepsilon^2$
+
+  1. Makes all values positive
+  
+  2. Exaggerates the presence of larger errors
+
+- **M**ean: average these squared errors
+
+- **R**oot: take their square root (un-exaggerate)
+
+$$RM{\color{red}S}E = \sqrt{\frac{1}{n}\sum_{i = 1}^n(\underbrace{\varepsilon)^2}_{S}}$$
+
+---
+
+# RMSE
+
+- **E**rror ( $\varepsilon$ ): actual outcome ( $Y_i$ ) - predicted outcome ( $\hat{Y}_i$ )
+
+  - The "distance" between the data and the model
+
+- **S**quared: $\varepsilon^2$
+
+  1. Makes all values positive
+  
+  2. Exaggerates the presence of larger errors
+
+- **.red[M]**.red[ean: average these squared errors]
+
+- **R**oot: take their square root (un-exaggerate)
+
+$$R{\color{red}M}SE = \sqrt{\underbrace{\frac{1}{n}\sum_{i = 1}^n}_{M}(SE)}$$
+
+---
+
+# RMSE
+
+- **E**rror ( $\varepsilon$ ): actual outcome ( $Y_i$ ) - predicted outcome ( $\hat{Y}_i$ )
+
+  - The "distance" between the data and the model
+
+- **S**quared: $\varepsilon^2$
+
+  1. Makes all values positive
+  
+  2. Exaggerates the presence of larger errors
+
+- **M**ean: average these squared errors
+
+- **.red[R]**.red[oot: take their square root (un-exaggerate)]
+
+
+$${\color{red}R}MSE = \sqrt{(MSE)}$$
+
+---
+
+# RMSE
+
+- RMSE is a **single measure that summarizes model performance**
+
+--
+
+```{r}
+e <- mv_analysis$gross_log - mv_analysis$predictions
+
+se <- e^2
+
+mse <- mean(se)
+
+rmse <- sqrt(mse)
+# Or
+(rmseBudget <- sqrt(mean(mv_analysis$errors^2)))
+```
+
+- Is this good? 
+
+
+---
+
+# Predicting with uncertainty
+
+- Say we're talking to investors about a new movie that costs $10m
+
+--
+
+  - How do we plug 10m into our model?
+
+```{r, echo=F, results = F}
+m <- lm(gross_log ~ budget_log,data = mv)
+```
+
+  
+```{r}
+summary(m)$coefficients
+```
+
+- $\hat{Y}_i = \alpha + \beta * X$
+
+--
+
+  - $\alpha = 1.26$ and $\beta = 0.96$
+  
+--
+
+  - where $\hat{Y}_i$ is predicted gross (log) and $X$ is $10m budget (log)
+
+--
+
+```{r}
+pred_gross_log <- 1.26 + 0.96*log(1e7)
+```
+
+---
+
+# Predicted Gross
+
+--
+
+- Again, convert back out of logged values with `exp()`
+
+```{r}
+scales::dollar(exp(pred_gross_log))
+```
+
+--
+
+- Cool! We'll make $8.5m!
+
+--
+
+  - But we know our model isn't perfect
+  
+--
+
+  - Need to adjust for it's errors via **RMSE**
+
+---
+
+# Incorporating RMSE
+
+- Simple idea: add and subtract RMSE from this prediction
+
+```{r}
+pred_gross_log_ub <- 1.26 + 0.96*log(1e7) + rmseBudget
+pred_gross_log_lb <- 1.26 + 0.96*log(1e7) - rmseBudget
+scales::dollar(exp(c(pred_gross_log_ub,pred_gross_log_lb)))
+```
+
+--
+
+- So we'll either make a $56m profit or we'll lose almost $5m?
+
+--
+
+- **CONCLUSION PART 2**: maybe our model isn't very good?
+
+
+---
+
+# Introducing Cross Validation
+
+- We ran a model on the full data and calculated the RMSE
+
+--
+
+- But this approach risks .red["overfitting"]
+
+--
+
+  - .red[Overfitting] is when we get a model that happens to do well on our specific data, but isn't actually that useful for predicting elsewhere.
+  
+--
+
+  - "Elsewhere": Other periods, other movies, other datasets
+  
+--
+
+- .blue[Theory:] Why care about **external validity**?
+
+--
+
+  - What is the point of measuring relationship if they don't generalize?
+  
+---
+
+# Introducing Cross Validation
+
+- In order to avoid .red[overfitting], we want to "train" our model on one part of the data, and then "test" it on a different part of the data.
+
+--
+
+  - Model "can't see" the test data &rarr; better way to evaluate performance
+  
+--
+
+- Cross Validation: randomly split our data into a train set and test set
+
+--
+
+  - *Similar to bootstrapping*
+  
+---
+
+# Introducing Cross Validation (CV)
+
+```{r}
+set.seed(1021)
+# Create list of row numbers at random
+inds <- sample(1:nrow(mv_analysis),
+               size = round(nrow(mv_analysis)/2),
+               replace = F) 
+
+# Use slice(inds) to get training data
+train <- mv_analysis %>% 
+  slice(inds)
+
+# Use slice(-inds) to get test data
+test <- mv_analysis %>%
+  slice(-inds)
+```
+
+--
+
+- We now have two datasets of roughly the same number of observations!
+
+---
+
+# CV to Calculate RMSE
+
+--
+
+- We want to estimate a model based on the **test** data
+
+--
+
+- And evaluate RMSE based on the **train** data
+
+```{r}
+m2 <- lm(gross_log ~ budget_log,train)
+
+# predict() function on a new dataset
+test$preds <- predict(m2,newdata = test)
+
+# Now calculate RMSE on the new dataset
+e <- test$gross_log - test$preds
+se <- e^2
+mse <- mean(se,na.rm=T)
+rmse <- sqrt(mse)
+rmse
+```
+
+---
+
+# CV to Calculate RMSE
+
+- We did worse with CV! This is a *feature*
+
+--
+
+  - We are not being overconfident
+  
+--
+
+  - We are avoiding "overfitting"
+  
+--
+
+- Want to do this many times (like bootstrapping)
+
+---
+
+# CV to Calculate RMSE
+
+```{r}
+set.seed(123)
+bsRes <- NULL
+for(i in 1:100) {
+  inds <- sample(1:nrow(mv_analysis),
+                 size = round(nrow(mv_analysis)/2),
+                 replace = F)
+  
+  train <- mv_analysis %>% slice(inds)
+  test <- mv_analysis %>% slice(-inds)
+  
+  mTrain <- lm(gross_log ~ budget_log,train)
+  
+  test$preds <- predict(mTrain,newdata = test)
+  
+  rmse <- sqrt(mean((test$gross_log - test$preds)^2,na.rm=T))
+  bsRes <- c(bsRes,rmse)
+}
+
+mean(bsRes)
+```
+
+---
+
+# CV to Calculate RMSE
+
+```{r}
+data.frame(rmseBS = bsRes) %>%
+  ggplot(aes(x = rmseBS)) + 
+  geom_density() + 
+  geom_vline(xintercept = mean(bsRes),linetype = 'dashed')
+```
+
+
+---
+
+# Cross Validation
+
+- In this example, we used a 50-50 split
+
+--
+
+- Often, data scientists prefer an 80-20 split
+
+--
+
+  - **Improves** the model (80% of the data is more to learn from)...
+  
+  - ...but still **protects** against overfitting
+  
+```{r}
+inds <- sample(1:nrow(mv_analysis),
+               size = round(nrow(mv_analysis)*.8), #<<
+               replace = F)
+```
+
