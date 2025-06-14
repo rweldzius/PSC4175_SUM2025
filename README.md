@@ -163,7 +163,7 @@ Villanova University makes every reasonable effort to allow members of the commu
 | 6/20/25 | No lecture | | | | PSet 3 |
 | 6/23/25 | Clustering | k-means clustering | Video <br/> Slides | HW 14 | |
 | 6/24/25 | NLP 1 | k-means clustering on text | Video <br/> Slides | HW 15 | |
-| 6/25/25 | NLP 2 | Sentiment analysis | Video <br/> Slides |  | |
+| 6/25/25 | NLP 2 | Sentiment analysis | Video <br/> Slides | HW 16  | |
 | 6/26/25 | No new material |  |  | | PSet 4 |
 
 [Back to ToC](#table-of-contents)
