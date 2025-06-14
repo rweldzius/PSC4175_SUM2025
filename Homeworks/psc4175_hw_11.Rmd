@@ -1,9 +1,9 @@
 ---
 title: "Binary Predictors and Multiple Regression"
-subtitle: "Homework"
+subtitle: "Homework 11"
 author: "Prof. Weldzius"
 institute: "Villanova University"
-date: "Due Date: 2024-10-28"
+date: "Due Date: 2025-06-16"
 output: html_document
 ---
 
