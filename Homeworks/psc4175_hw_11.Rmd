@@ -178,7 +178,7 @@ cvRes %>%
   as.data.frame()
 ```
 
-So we improve the model fit by adding the Bechdel test scores. We are 98% certain that model 2 is an improvement over model 1, 99% sure that model 3 is an improvement over model 1, and 93% sure that model 3 is an improvement over model 2.
+So we improve the model fit by adding the Bechdel test scores. We are 99.9% certain that model 2 is an improvement over model 1, 99.9% sure that model 3 is an improvement over model 1, and 87% sure that model 3 is an improvement over model 2.
 
 
 ## Regression with a categorical variable
