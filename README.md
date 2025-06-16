@@ -160,7 +160,7 @@ Villanova University makes every reasonable effort to allow members of the commu
 | 6/17/25 | Classification 1 | The concept of logistic regression | Video <br/> Slides | HW 12 | |
 | 6/18/25 | Classification 2 | Interpreting output and evaluating model |Video <br/> Slides | HW 13 | |
 | 6/19/25 | Holiday; No lecture | | | | 
-| 6/20/25 | No lecture | | | | PSet 3 |
+| 6/20/25 | No lecture | | | | [PS 3](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Psets/psc4175_pset_3.Rmd)  |
 | 6/23/25 | Clustering | k-means clustering | Video <br/> Slides | HW 14 | |
 | 6/24/25 | NLP 1 | k-means clustering on text | Video <br/> Slides | HW 15 | |
 | 6/25/25 | NLP 2 | Sentiment analysis | Video <br/> Slides | HW 16  | |
