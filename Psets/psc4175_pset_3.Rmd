@@ -2,7 +2,7 @@
 title: "Problem Set 3"
 subtitle: "Classification"
 author: "[YOUR NAME]"
-institute: "Vanderbilt University"
+institute: "Villanova University"
 date: "Due Date: 2025-06-20"
 output:
   html_document: default
