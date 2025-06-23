@@ -1,0 +1,787 @@
+---
+title: "Clustering"
+subtitle: "Part 1b"
+author: "Prof. Ryan Weldzius"
+institute: "Villanova University"
+# date: "Slides Updated: `r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    # self_contained: true
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css:
+      - default
+      - css/lexis.css
+      - css/lexis-fonts.css
+    #seal: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+
+---
+
+```{css,echo = F}
+.small .remark-code { /*Change made here*/
+  font-size: 85% !important;
+}
+.tiny .remark-code { /*Change made here*/
+  font-size: 50% !important;
+}
+```
+
+```{r,include=F}
+set.seed(123)
+options(width=60)
+knitr::opts_chunk$set(fig.align='center',fig.width=9,fig.height=5,message=F,warning=F)
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+```
+
+# Agenda
+
+1. Application of k-means clustering
+
+---
+
+# Clustering to Learn about MCs
+
+```{r, message=FALSE}
+library(tidyverse)
+dat <- read_csv('../Data/H097_members.csv')
+glimpse(dat)
+```
+
+---
+
+# DW-NOMINATE
+
+- DW-NOMINATE is a measure of how frequently different legislators vote together
+
+--
+
+- Often interpreted as "ideology"
+
+--
+
+- Two-dimensions:
+
+--
+
+  1. Standard left-right ideology (size of gov, redistribution, etc.)
+  
+  2. Second dimension changes, but typically **salient social issues**
+  
+--
+
+- Can $k$-means clustering help us learn about legislators?
+
+---
+
+# 97th Congress (1981-1983)
+
+```{r,message = F,warning = F}
+require(scales)
+library(plotly)
+gg <- dat %>%
+  ggplot(aes(x = nominate_dim1,y = nominate_dim2,
+             text = bioname)) + 
+  geom_point() + 
+  labs(x = 'DW-Nominate Dimension 1',
+       y = 'DW-Nominate Dimension 2')
+```
+
+---
+
+# 97th Congress (1981-1983)
+
+```{r,warning = F,echo = F}
+ggplotly(gg,tooltip = "text")
+```
+
+---
+
+# Intuition Check
+
+--
+
+- Can we see some clusters?
+
+  - What do we think these are?
+  
+--
+
+- Let's try estimating $k$-means!
+
+--
+
+- Function `kmeans(x,centers,iter.max,nstart)`
+
+--
+
+  - `x` is the data (only select the columns of interest!)
+  
+  - `centers` is the number of centroids
+  
+  - `iter.max` maximum amount of "steps"
+  
+  - `nstart` how many times to re-estimate
+  
+---
+
+# Clustering on Ideology
+
+- First, some light wrangling (convert numeric party code to character)
+
+```{r}
+datClust <- dat %>% 
+  mutate(party = ifelse(party_code == 200,'R',
+                        ifelse(party_code == 100,'D','I'))) %>%
+  mutate(nameParty = paste0(bioname,' (',party,')')) %>%
+  select(nominate_dim1,nominate_dim2,nameParty) %>% drop_na()
+```
+
+---
+
+# Clustering on Ideology
+
+- Second, estimate `kmeans()` function
+
+```{r}
+m <- kmeans(x = datClust %>% select(nominate_dim1,nominate_dim2),
+            centers = 2)
+
+m
+```
+
+---
+
+# Clustering on Ideology
+
+- Easier to see output with the help of `tidymodels` package
+
+```{r,message=F,warning=F}
+require(tidymodels)
+tidy(m)
+```
+
+--
+
+- First two columns are the **locations** of the centroids
+
+- `size` is the number of observations associated with each group
+
+- `withinss` is the **errors** each centroid makes
+
+---
+
+# Clustering on Ideology
+
+- Third, plot points and color by cluster
+
+```{r}
+ggClust <- datClust %>%
+  mutate(cluster = m$cluster) %>% # Add cluster to data
+  ggplot(aes(x = nominate_dim1, y = nominate_dim2, 
+             color = factor(cluster),
+             text=nameParty)) +
+  geom_point() +
+  labs(x = 'DW-Nominate Dimension 1',
+       y = 'DW-Nominate Dimension 2',
+       title="97th Congress Ideology",
+       color = "Cluster")
+```
+
+---
+
+# Clustering on Ideology
+
+```{r}
+ggplotly(ggClust,tooltip = 'text')
+```
+
+
+---
+
+# More Clusters
+
+```{r}
+m <- kmeans(x = datClust %>% select(nominate_dim1,nominate_dim2),
+            centers = 3)
+```
+```{r,echo = F}
+ggClust <- datClust %>%
+  mutate(cluster = m$cluster) %>%
+  ggplot(aes(x = nominate_dim1, y = nominate_dim2, color = factor(cluster),
+             text=nameParty)) +
+  geom_point() +
+  labs(x = 'DW-Nominate Dimension 1',
+       y = 'DW-Nominate Dimension 2',
+       title="97th Congress Ideology",
+       subtitle = '# Clusters = 3',
+       color = "Cluster")
+ggplotly(ggClust,tooltip = 'text')
+```
+
+
+---
+
+# More Clusters
+
+```{r}
+m <- kmeans(x = datClust %>% select(nominate_dim1,nominate_dim2),
+            centers = 4)
+```
+```{r,echo = F}
+ggClust <- datClust %>%
+  mutate(cluster = m$cluster) %>%
+  ggplot(aes(x = nominate_dim1, y = nominate_dim2, color = factor(cluster),
+             text=nameParty)) +
+  geom_point() +
+  labs(x = 'DW-Nominate Dimension 1',
+       y = 'DW-Nominate Dimension 2',
+       title="97th Congress Ideology",
+       subtitle = '# Clusters = 4',
+       color = "Cluster")
+ggplotly(ggClust,tooltip = 'text')
+```
+
+
+---
+
+# More Clusters
+
+```{r}
+m <- kmeans(x = datClust %>% select(nominate_dim1,nominate_dim2),
+            centers = 5)
+```
+```{r,echo = F}
+ggClust <- datClust %>%
+  mutate(cluster = m$cluster) %>%
+  ggplot(aes(x = nominate_dim1, y = nominate_dim2, color = factor(cluster),
+             text=nameParty)) +
+  geom_point() +
+  labs(x = 'DW-Nominate Dimension 1',
+       y = 'DW-Nominate Dimension 2',
+       title="97th Congress Ideology",
+       subtitle = '# Clusters = 5',
+       color = "Cluster")
+ggplotly(ggClust,tooltip = 'text')
+```
+
+---
+
+# How many clusters?
+
+--
+
+- Recall from regression that we are interested in **errors**
+
+--
+
+- What are "errors" in the context of clustering?
+
+--
+
+```{r,echo = F}
+m <- datClust %>% select(nominate_dim1,nominate_dim2) %>%
+  kmeans(centers = 2)
+
+cents <- data.frame(m$centers)
+
+toplot <- datClust %>%
+  mutate(clust = m$cluster) 
+
+toplot %>%
+  ggplot(aes(x = nominate_dim1,y = nominate_dim2,color = factor(clust))) + 
+  geom_point() + 
+  geom_point(data = cents,aes(x = nominate_dim1,y = nominate_dim2),
+             inherit.aes = F,shape = '+',size = 10) + 
+  labs(x = 'DW-Nominate Dimension 1',
+       y = 'DW-Nominate Dimension 2',
+       title="97th Congress Ideology",
+       color = "Cluster") + 
+  theme(legend.position = 'none')
+```
+
+---
+
+# How many clusters?
+
+- Recall from regression that we are interested in **errors**
+
+- What are "errors" in the context of clustering?
+
+```{r,echo = F}
+toplot %>%
+  ggplot(aes(x = nominate_dim1,y = nominate_dim2,color = factor(clust))) + 
+  geom_point() + 
+  geom_segment(data = toplot %>%
+                 filter(clust == 1),
+               aes(x = nominate_dim1,y = nominate_dim2),xend = cents$nominate_dim1[1],yend = cents$nominate_dim2[1]) +
+  geom_segment(data = toplot %>%
+                 filter(clust == 2),
+               aes(x = nominate_dim1,y = nominate_dim2),xend = cents$nominate_dim1[2],yend = cents$nominate_dim2[2]) +
+  geom_point(data = cents,aes(x = nominate_dim1,y = nominate_dim2),
+             inherit.aes = F,shape = '+',size = 10) + 
+  labs(x = 'DW-Nominate Dimension 1',
+       y = 'DW-Nominate Dimension 2',
+       title="97th Congress Ideology",
+       color = "Cluster") + 
+  theme(legend.position = 'none')
+```
+
+
+---
+
+# How many clusters?
+
+- Recall from regression that we are interested in **errors**
+
+- What are "errors" in the context of clustering?
+
+- Just the sum of each observation's distance from its centroid!
+
+--
+
+  - Within Sum of Squares (**WSS**)
+
+```{r,message=F,warning=F}
+tidy(m)
+```
+
+---
+
+# So...how many?!
+
+- Want to choose a number of clusters that reduces the total **WSS**
+
+--
+
+```{r}
+m.cluster <- datClust %>%
+  select(-nameParty) %>% # Same as selecting two dimensions
+  kmeans(centers = 3)
+```
+
+```{r,echo = F,warning=F,message=F}
+cents <- data.frame(m.cluster$centers) %>%
+  mutate(clust = row_number()) %>%
+  rename(xend = nominate_dim1,yend = nominate_dim2)
+
+cents$wss <- m.cluster$withinss
+
+toplot <- datClust %>%
+  as_tibble() %>%
+  mutate(clust = m.cluster$cluster) %>%
+  left_join(cents)
+
+toplot %>%
+  ggplot(aes(x = nominate_dim1,y = nominate_dim2,color = factor(clust))) + 
+  geom_point() + 
+  geom_segment(aes(x = nominate_dim1,y = nominate_dim2,xend = xend,yend = yend)) + 
+  geom_point(data = cents,aes(x = xend,y = yend),
+             inherit.aes = F,shape = '+',size = 10) + 
+  geom_label(data = cents,aes(x = xend,y = yend,label = round(wss,1)),inherit.aes = F,hjust = 0,vjust = 0,nudge_x = .1,nudge_y = .1) + 
+  annotate(geom = 'label',x = 0,y = 1,label = paste0('Tot WSS = ',round(m.cluster$tot.withinss,1))) + 
+  labs(x = 'DW-Nominate Dimension 1',
+       y = 'DW-Nominate Dimension 2',
+       title="97th Congress Ideology",
+       color = "Cluster") + 
+  theme(legend.position = 'none')
+```
+
+---
+
+# So...how many?!
+
+- Want to choose a number of clusters that reduces the total **WSS**
+
+```{r}
+m.cluster <- datClust %>%
+  select(-nameParty) %>%
+  kmeans(centers = 4)
+```
+
+```{r,echo = F,warning=F,message=F}
+cents <- data.frame(m.cluster$centers) %>%
+  mutate(clust = row_number()) %>%
+  rename(xend = nominate_dim1,yend = nominate_dim2)
+
+cents$wss <- m.cluster$withinss
+
+toplot <- datClust %>%
+  as_tibble() %>%
+  mutate(clust = m.cluster$cluster) %>%
+  left_join(cents)
+
+toplot %>%
+  ggplot(aes(x = nominate_dim1,y = nominate_dim2,color = factor(clust))) + 
+  geom_point() + 
+  geom_segment(aes(x = nominate_dim1,y = nominate_dim2,xend = xend,yend = yend)) + 
+  geom_point(data = cents,aes(x = xend,y = yend),
+             inherit.aes = F,shape = '+',size = 10) + 
+  geom_label(data = cents,aes(x = xend,y = yend,label = round(wss,1)),inherit.aes = F,hjust = 0,vjust = 0,nudge_x = .1,nudge_y = .1) + 
+  annotate(geom = 'label',x = 0,y = 1,label = paste0('Tot WSS = ',round(m.cluster$tot.withinss,1))) + 
+  labs(x = 'DW-Nominate Dimension 1',
+       y = 'DW-Nominate Dimension 2',
+       title="97th Congress Ideology",
+       color = "Cluster") + 
+  theme(legend.position = 'none')
+```
+
+---
+
+# So...how many?!
+
+- Want to choose a number of clusters that reduces the total **WSS**
+
+```{r}
+m.cluster <- datClust %>%
+  select(-nameParty) %>%
+  kmeans(centers = 5)
+```
+
+```{r,echo = F,warning=F,message=F}
+cents <- data.frame(m.cluster$centers) %>%
+  mutate(clust = row_number()) %>%
+  rename(xend = nominate_dim1,yend = nominate_dim2)
+
+cents$wss <- m.cluster$withinss
+
+toplot <- datClust %>%
+  as_tibble() %>%
+  mutate(clust = m.cluster$cluster) %>%
+  left_join(cents)
+
+toplot %>%
+  ggplot(aes(x = nominate_dim1,y = nominate_dim2,color = factor(clust))) + 
+  geom_point() + 
+  geom_segment(aes(x = nominate_dim1,y = nominate_dim2,xend = xend,yend = yend)) + 
+  geom_point(data = cents,aes(x = xend,y = yend),
+             inherit.aes = F,shape = '+',size = 10) + 
+  geom_label(data = cents,aes(x = xend,y = yend,label = round(wss,1)),inherit.aes = F,hjust = 0,vjust = 0,nudge_x = .1,nudge_y = .1) + 
+  annotate(geom = 'label',x = 0,y = 1,label = paste0('Tot WSS = ',round(m.cluster$tot.withinss,1))) + 
+  labs(x = 'DW-Nominate Dimension 1',
+       y = 'DW-Nominate Dimension 2',
+       title="97th Congress Ideology",
+       color = "Cluster") + 
+  theme(legend.position = 'none')
+```
+
+---
+
+# So...how many?!
+
+- Want to choose a number of clusters that reduces the total **WSS**
+
+```{r}
+m.cluster <- datClust %>%
+  select(-nameParty) %>%
+  kmeans(centers = 10)
+```
+
+```{r,echo = F,warning=F,message=F}
+cents <- data.frame(m.cluster$centers) %>%
+  mutate(clust = row_number()) %>%
+  rename(xend = nominate_dim1,yend = nominate_dim2)
+
+cents$wss <- m.cluster$withinss
+
+toplot <- datClust %>%
+  as_tibble() %>%
+  mutate(clust = m.cluster$cluster) %>%
+  left_join(cents)
+
+toplot %>%
+  ggplot(aes(x = nominate_dim1,y = nominate_dim2,color = factor(clust))) + 
+  geom_point() + 
+  geom_segment(aes(x = nominate_dim1,y = nominate_dim2,xend = xend,yend = yend)) + 
+  geom_point(data = cents,aes(x = xend,y = yend),
+             inherit.aes = F,shape = '+',size = 10) + 
+  geom_label(data = cents,aes(x = xend,y = yend,label = round(wss,1)),inherit.aes = F,hjust = 0,vjust = 0,nudge_x = .1,nudge_y = .1) + 
+  annotate(geom = 'label',x = 0,y = 1,label = paste0('Tot WSS = ',round(m.cluster$tot.withinss,1))) + 
+  labs(x = 'DW-Nominate Dimension 1',
+       y = 'DW-Nominate Dimension 2',
+       title="97th Congress Ideology",
+       color = "Cluster") + 
+  theme(legend.position = 'none')
+```
+
+---
+
+# So...how many?!
+
+- Want to choose a number of clusters that reduces the total **WSS**
+
+```{r}
+m.cluster <- datClust %>%
+  select(-nameParty) %>%
+  kmeans(centers = 30)
+```
+
+```{r,echo = F,warning=F,message=F}
+cents <- data.frame(m.cluster$centers) %>%
+  mutate(clust = row_number()) %>%
+  rename(xend = nominate_dim1,yend = nominate_dim2)
+
+cents$wss <- m.cluster$withinss
+
+toplot <- datClust %>%
+  as_tibble() %>%
+  mutate(clust = m.cluster$cluster) %>%
+  left_join(cents)
+
+toplot %>%
+  ggplot(aes(x = nominate_dim1,y = nominate_dim2,color = factor(clust))) + 
+  geom_point() + 
+  geom_segment(aes(x = nominate_dim1,y = nominate_dim2,xend = xend,yend = yend)) + 
+  geom_point(data = cents,aes(x = xend,y = yend),
+             inherit.aes = F,shape = '+',size = 10) + 
+  geom_label(data = cents,aes(x = xend,y = yend,label = round(wss,1)),inherit.aes = F,hjust = 0,vjust = 0,nudge_x = .1,nudge_y = .1) + 
+  annotate(geom = 'label',x = 0,y = 1,label = paste0('Tot WSS = ',round(m.cluster$tot.withinss,1))) + 
+  labs(x = 'DW-Nominate Dimension 1',
+       y = 'DW-Nominate Dimension 2',
+       title="97th Congress Ideology",
+       color = "Cluster") + 
+  theme(legend.position = 'none')
+```
+
+---
+
+# So...how many?!
+
+- But there's a trade-off!
+
+--
+
+  - Accuracy versus **parsimony**
+  
+--
+
+- Simple rule: look for the "elbow"
+
+```{r}
+totWSS <- NULL
+for(k in 1:10) {
+  m.cluster <- datClust %>%
+    select(-nameParty) %>%
+    kmeans(centers = k,nstart = 25)
+  totWSS <- data.frame(totWSS = m.cluster$tot.withinss,
+             k = k) %>%
+    bind_rows(totWSS)
+}
+```
+
+---
+
+# Looking for the "elbow"
+
+```{r}
+totWSS %>%
+  ggplot(aes(x = k,y = totWSS)) + 
+  geom_line() + geom_point() + 
+  labs(x = 'Number of Clusters',y = 'Total WSS') + 
+  scale_x_continuous(breaks = 1:10)
+```
+
+
+---
+
+# Clustering on Ideology
+
+- Note that we need to `set.seed()`! Centroid starting points are **random**!
+
+```{r}
+m <- kmeans(x = datClust %>% select(nominate_dim1,nominate_dim2),
+                    centers = 2)
+```
+```{r,echo = F}
+ggClust <- datClust %>%
+  mutate(cluster = m$cluster) %>%
+  ggplot(aes(x = nominate_dim1, y = nominate_dim2, color = factor(cluster),
+             text=nameParty)) +
+  geom_point() +
+  labs(x = 'DW-Nominate Dimension 1',
+       y = 'DW-Nominate Dimension 2',
+       title="97th Congress Ideology",
+       color = "Cluster")
+ggplotly(ggClust,tooltip = 'text')
+```
+
+---
+
+# Clustering on Ideology
+
+- Note that we need to `set.seed()`! Centroid starting points are **random**!
+
+```{r}
+m <- kmeans(x = datClust %>% select(nominate_dim1,nominate_dim2),
+                    centers = 2)
+```
+```{r,echo = F}
+ggClust <- datClust %>%
+  mutate(cluster = m$cluster) %>%
+  ggplot(aes(x = nominate_dim1, y = nominate_dim2, color = factor(cluster),
+             text=nameParty)) +
+  geom_point() +
+  labs(x = 'DW-Nominate Dimension 1',
+       y = 'DW-Nominate Dimension 2',
+       title="97th Congress Ideology",
+       color = "Cluster")
+ggplotly(ggClust,tooltip = 'text')
+```
+
+---
+
+# Clustering on Ideology
+
+- Note that we need to `set.seed()`! Centroid starting points are **random**!
+
+```{r}
+m <- kmeans(x = datClust %>% select(nominate_dim1,nominate_dim2),
+                    centers = 2)
+```
+```{r,echo = F}
+ggClust <- datClust %>%
+  mutate(cluster = m$cluster) %>%
+  ggplot(aes(x = nominate_dim1, y = nominate_dim2, color = factor(cluster),
+             text=nameParty)) +
+  geom_point() +
+  labs(x = 'DW-Nominate Dimension 1',
+       y = 'DW-Nominate Dimension 2',
+       title="97th Congress Ideology",
+       color = "Cluster")
+ggplotly(ggClust,tooltip = 'text')
+```
+
+---
+
+# Clustering on Ideology
+
+- Note that we need to `set.seed()`! Centroid starting points are **random**!
+
+```{r}
+m <- kmeans(x = datClust %>% select(nominate_dim1,nominate_dim2),
+                    centers = 2)
+```
+```{r,echo = F}
+ggClust <- datClust %>%
+  mutate(cluster = m$cluster) %>%
+  ggplot(aes(x = nominate_dim1, y = nominate_dim2, color = factor(cluster),
+             text=nameParty)) +
+  geom_point() +
+  labs(x = 'DW-Nominate Dimension 1',
+       y = 'DW-Nominate Dimension 2',
+       title="97th Congress Ideology",
+       color = "Cluster")
+ggplotly(ggClust,tooltip = 'text')
+```
+
+---
+
+# Clustering Randomness
+
+- Can overcome with `nstart`
+
+--
+
+  - Attempts multiple initial centroids and chooses the "best"
+  
+```{r}
+set.seed(42)
+c1 <- kmeans(datClust %>% select(-nameParty),centers = 2,nstart = 25)
+
+set.seed(123)
+c2 <- kmeans(datClust %>% select(-nameParty),centers = 2,nstart = 25)
+
+table(c1$cluster,c2$cluster)
+
+table(c1$cluster)
+table(c2$cluster)
+```
+
+
+
+
+---
+
+# Is Polarization Increasing?
+
+- Compare 97th Congress (1981-1983) to 117th Congress (2021-2023)
+
+```{r,warning=F,message=F}
+dat <- read_csv('../Data/H117_members.csv')
+datClust <- dat %>% 
+  mutate(party = ifelse(party_code == 200,'R',
+                        ifelse(party_code == 100,'D','I'))) %>%
+  mutate(nameParty = paste0(bioname,' (',party,')')) %>% # combine name + party
+  select(nominate_dim1,nominate_dim2,nameParty) %>% drop_na()
+```
+
+- Check for the "elbow"
+
+```{r}
+totWSS <- NULL
+for(k in 1:10) {
+  m.cluster <- datClust %>%
+    select(-nameParty) %>% kmeans(centers = k,nstart = 25)
+  totWSS <- data.frame(totWSS = m.cluster$tot.withinss,k = k) %>%
+    bind_rows(totWSS)
+}
+```
+
+---
+
+# Check for the "elbow"
+
+```{r}
+totWSS %>%
+  ggplot(aes(x = k,y = totWSS)) + 
+  geom_line() + geom_point() + 
+  labs(x = 'Number of Clusters',y = 'Total WSS') + 
+  scale_x_continuous(breaks = 1:10)
+```
+
+---
+
+# Growing polarization?
+
+```{r}
+m <- kmeans(x = datClust %>% select(nominate_dim1,nominate_dim2),
+            centers = 2)
+```
+```{r,echo = F}
+ggClust <- datClust %>%
+  mutate(cluster = m$cluster) %>%
+  ggplot(aes(x = nominate_dim1, y = nominate_dim2, color = factor(cluster),
+             text=nameParty)) +
+  geom_point() +
+  labs(x = 'DW-Nominate Dimension 1',
+       y = 'DW-Nominate Dimension 2',
+       title="117th Congress Ideology",
+       color = "Cluster")
+ggplotly(ggClust,tooltip = 'text')
+```
+
+
+---
+
+# Conclusion
+
+--
+
+- Clustering is part of a third camp of data science
+
+--
+
+  1. Theory Testing
+  
+  2. Prediction
+  
+  3. **Learning**
+  
