@@ -162,8 +162,8 @@ Villanova University makes every reasonable effort to allow members of the commu
 | 6/19/25 | Holiday; No lecture | | | | 
 | 6/20/25 | No lecture | | | | [PS 3](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Psets/psc4175_pset_3.Rmd)  |
 | 6/23/25 | Clustering | k-means clustering | Video <br/> Slides | [HW14.html](https://rweldzius.github.io/PSC4175_SUM2025/Homeworks/psc4175_hw_14.html) <br/> [HW14.Rmd](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_14.Rmd) | |
-| 6/24/25 | NLP 1 | k-means clustering on text | Video <br/> Slides | HW 15 | |
-| 6/25/25 | NLP 2 | Sentiment analysis | Video <br/> Slides | HW 16  | |
+| 6/24/25 | NLP 1 | k-means clustering on text | Video <br/> Slides | [HW15.html](https://rweldzius.github.io/PSC4175_SUM2025/Homeworks/psc4175_hw_15.html) <br/> [HW15.Rmd](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_15.Rmd) | |
+| 6/25/25 | NLP 2 | Sentiment analysis | Video <br/> Slides | [HW16.html](https://rweldzius.github.io/PSC4175_SUM2025/Homeworks/psc4175_hw_16.html) <br/> [HW16.Rmd](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Homeworks/psc4175_hw_16.Rmd) | |
 | 6/26/25 | No new material |  |  | | [PS 4](https://github.com/rweldzius/PSC4175_SUM2025/blob/main/Psets/psc4175_pset_4.Rmd) |
 
 [Back to ToC](#table-of-contents)
