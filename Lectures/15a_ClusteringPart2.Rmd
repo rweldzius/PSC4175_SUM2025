@@ -1,0 +1,359 @@
+---
+title: "Clustering"
+subtitle: "Part 2a"
+author: "Prof. Weldzius"
+institute: "Villanova University"
+# date: "Slides Updated: `r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    # self_contained: true
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css:
+      - default
+      - css/lexis.css
+      - css/lexis-fonts.css
+    #seal: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+
+---
+
+```{css,echo = F}
+.small .remark-code { /*Change made here*/
+  font-size: 85% !important;
+}
+.tiny .remark-code { /*Change made here*/
+  font-size: 50% !important;
+}
+```
+
+```{r,include=F}
+set.seed(123)
+options(width=60)
+knitr::opts_chunk$set(fig.align='center',fig.width=9,fig.height=5,message=F,warning=F)
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+```
+
+# Agenda
+
+1. Tweets as data
+
+2. Words &rarr; topics
+
+3. Application
+
+---
+
+# Social Media
+
+- Unprecedented access to our leaders
+
+--
+
+  - (If they let us)
+  
+--
+
+<center><img src="https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/themes/2271049/settings_images/TFQe2IEJSWuLQrrYueXd_pasted_image_0_28.png" width="60%"></center>
+
+---
+
+# Social Media
+
+- Unprecedented access to our leaders 
+
+  - (If they let us)
+
+<center><img src="https://media-cldnry.s-nbcnews.com/image/upload/newscms/2020_29/3391138/200618-donald-trump-cellphone-smartphone-cell-ac-1059p.jpg" width="60%"></center>
+
+---
+
+# Social Media
+
+- For researchers, social media is two things
+
+--
+
+  1. A source of .red[data]
+  
+--
+
+  2. An object of .blue[interest]
+  
+--
+
+<center><img src="https://ichef.bbci.co.uk/news/1024/cpsprodpb/173D6/production/_116409159_tweet6.png" width="70%"></center>
+
+---
+
+# Twitter as Data
+
+- Not the most popular social media app
+
+<center><img src="https://www.pewresearch.org/internet/wp-content/uploads/sites/9/2021/04/PI_2021.04.07_social-media_0-01.png?w=640" width="40%"></center>
+
+---
+
+# Twitter as Data
+
+- But an outsized platform for the elite
+
+--
+
+- As of 2020
+
+--
+
+  - every U.S. governor had a Twitter account
+  
+--
+
+  - 49 had a Facebook account
+  
+--
+
+  - 44 had an Instagram account
+
+--
+
+  - 44 had a YouTube account
+  
+--
+
+- In professional networks, particularly media, Twitter is almost *lingua franca*
+
+---
+
+# Twitter as Data
+
+- Today?
+
+--
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Twitter has had a massive drop in revenue, due to activist groups pressuring advertisers, even though nothing has changed with content moderation and we did everything we could to appease the activists.<br><br>Extremely messed up! They’re trying to destroy free speech in America.</p>&mdash; Elon Musk (@elonmusk) <a href="https://twitter.com/elonmusk/status/1588538640401018880?ref_src=twsrc%5Etfw">November 4, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+---
+
+
+# Twitter as Data
+
+- Today?
+
+<center><img src="https://cdn.buttercms.com/output=f:webp/fmP3QLFASRuKz9oMC29w" width="50%"></center>
+
+---
+
+# Trump and Twitter
+
+- Today, looking at Trump's tweets
+
+--
+
+  - Treating it as a .red[data source]
+  
+--
+
+  - What can his tweets tell us about the man?
+  
+```{r,message=F,warning=F}
+require(tidyverse)
+tweets <- read_rds(file="../Data/Trumptweets.Rds")
+```
+
+--
+
+- The **process**
+
+--
+
+  - Univariate visualisation: how often does he tweet?
+  
+--
+
+```{r}
+p <- tweets %>% 
+  count(Tweeting.date) %>%
+  ggplot() +
+  geom_point(aes(x=Tweeting.date,y=n),alpha=.4) +
+  scale_x_date(date_breaks = 'years',date_labels = '%Y') + 
+  labs(x="Date",y="Number of Tweets",title="Tweeting by Trump")
+```
+
+---
+
+# Trump and Twitter
+
+```{r}
+p
+```
+
+---
+
+# Trump and Twitter
+
+- Research questions abound!
+
+--
+
+1. What happened in...
+  
+  - June of 2011?
+    
+  - June of 2012?
+    
+  - November of 2016? (duh)
+    
+--
+
+2. Overtime increase during presidency?
+
+--
+
+3. Others?
+
+---
+
+# Trump and Twitter
+
+- .blue[Research Question:] Did Trump's twitter account benefit from his presidency?
+
+--
+
+```{r,message = F}
+require(scales)
+p <- tweets %>% 
+  group_by(Tweeting.date) %>%
+  summarize(AvgRetweet = mean(retweets)) %>%
+  ggplot() +
+  geom_point(aes(x=Tweeting.date,y=AvgRetweet),alpha=.4) +
+  labs(x="Date",y="Average Retweets",title="Tweeting by Trump") +
+  scale_y_continuous(label=comma)
+```
+
+---
+
+# Trump and Twitter
+
+- .blue[Research Question:] Did Trump's twitter account benefit from his presidency?
+
+- **Yes**
+
+```{r,echo = F}
+p
+```
+
+
+---
+
+# Looking with `plotly`
+
+```{r message=FALSE}
+library(plotly)
+gg <- tweets %>%
+  filter(retweets > quantile(retweets,.75)) %>% 
+  ggplot(aes(x=Tweeting.date,y=retweets,text=stringr::str_wrap(content,width = 60))) +
+  geom_point(alpha=.4) +
+  labs(x="Date",y="Retweets",title="Tweeting by Trump") +
+  scale_y_continuous(label=scales::comma)
+```
+
+---
+
+# Looking with `plotly`
+
+```{r}
+ggplotly(gg,tooltip = "text")
+```
+
+---
+
+# Trump's Censored Tweets
+
+- What was Trump tweeting about when he was flagged by Twitter?
+
+```{r}
+tweets %>%
+  filter(is_flagged) %>% # Indicator for Twitter flag
+  ggplot(aes(x = Tweeting.date)) + geom_bar()
+```
+
+# Trump's Censored Tweets
+
+- Proportion of flagged tweets instead of counts
+
+```{r,echo=F,warning=F,message=F}
+gg <- tweets %>%
+  count(Tweeting.date,is_flagged) %>%
+  group_by(Tweeting.date) %>%
+  mutate(totTweets = sum(n)) %>%
+  ungroup() %>%
+  mutate(prop = n / totTweets) %>%
+  filter(is_flagged) %>%
+  ggplot(aes(x = Tweeting.date,y = prop)) + 
+  geom_point() + 
+  scale_y_continuous(labels = scales::percent) + 
+  labs(x = 'Date',y = 'Proportion of Total Tweets Flagged')
+```
+
+```{r}
+gg
+```
+
+---
+
+# Looking at content
+
+- We could just look at the flagged tweets themselves
+
+```{r,echo=F}
+gg <- tweets %>%
+  filter(is_flagged) %>%
+  ggplot(aes(x = Tweeting.date,y = retweets,text = stringr::str_wrap(content,width = 60))) + 
+  geom_point() + 
+  scale_y_continuous(labels = scales::percent) + 
+  labs(x = 'Date',y = 'Total Retweets')
+```
+
+```{r}
+ggplotly(gg)
+```
+
+---
+
+# Looking at content
+
+- Or we can look at statistical summaries of Trump's tweets
+
+--
+
+  1. Tweets as .red[data]: we can understand him better
+  
+  2. Tweets as .blue[object of interest]: how do his tweets influence public discourse?
+  
+--
+
+- We will be using pre-processed tweets
+
+--
+
+  - Lots of **data wrangling** went into this
+  
+  - See the `prepping_raw_tweets.R` file for more details
+
+--
+
+- Next time:
+
+```{r}
+tweet_words <- read_rds(file="../Data/Trump_tweet_words.Rds")
+```
+
+

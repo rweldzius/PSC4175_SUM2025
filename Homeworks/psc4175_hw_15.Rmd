@@ -13,11 +13,11 @@ knitr::opts_chunk$set(echo = TRUE,error=TRUE,warning = FALSE,message = FALSE)
 
 ## Tweets, Texts, and Topics, oh my!
 
-Lots of press attention (and academic/commercial research) to social media communication.  Trying to characterize (in the hopes of predicting) behavior and "sentiment."  Many are trying to do this at scale -- analyzing the behavior of large numbers of individual users -- including using clustering methods to uncover different "types" of users that can be used to understand and predict human opinion and behavior across a wide range of activities and concepts.
+Lots of press attention (and academic/commercial research) to social media communication, trying to characterize (in the hopes of predicting) behavior and "sentiment."  Many are trying to do this at scale -- analyzing the behavior of large numbers of individual users -- including using clustering methods to uncover different "types" of users that can be used to understand and predict human opinion and behavior across a wide range of activities and concepts.
 
-Perhaps no individual has been more scrutinized than former President Trump -- who was arguably defined by his use of twitter as a medium of communication, agenda-setting, and mobilization.  Multiple news stories and academic papers have focused on the corpus of Trump Tweets.
+Perhaps no individual has been more scrutinized than President Trump -- who was arguably defined by his use of twitter as a medium of communication, agenda-setting, and mobilization during his first administration.  Multiple news stories and academic papers have focused on the corpus of Trump Tweets.
 
-For example, the NY Times did an expose [here](https://www.nytimes.com/interactive/2019/11/02/us/politics/trump-twitter-presidency.html) whereby they had reporters read every single tweet and classify it. (See the methodology [here](https://www.nytimes.com/2019/11/02/insider/trump-twitter-data.html).  Remarkably, this was work that was done by hand.  Hopefully by the end of class you can see how you could do something similar using R!  More similar to what we are going to do is the work by [fivethirtyeight](https://fivethirtyeight.com/features/the-worlds-favorite-donald-trump-tweets/).
+For example, the NY Times did an expose [here](https://www.nytimes.com/interactive/2019/11/02/us/politics/trump-twitter-presidency.html) whereby they had reporters read every single tweet and classify it (See the methodology [here](https://www.nytimes.com/2019/11/02/insider/trump-twitter-data.html)).  Remarkably, this was work that was done by hand.  Hopefully by the end of class you can see how you could do something similar using R!  More similar to what we are going to do is the work by [fivethirtyeight](https://fivethirtyeight.com/features/the-worlds-favorite-donald-trump-tweets/).
 
 We used to be able to read in Trump data via the Twitter API, but since that has been deactivated we are going to use data that was collected and posted [here](https://www.kaggle.com/austinreese/trump-tweets).     
 
@@ -60,7 +60,7 @@ rm(trumptweets)
 ```
 
 
-Let's focus on asking the question of how Trump's Twitter behavior changed over time.  This is a broad question, so let's break it up into a few specific questions to tackle using the tools we have talked about thus far to help demonstrate that based on the concepts and code we have talked about in class you are able to do quite a bit.
+Let's focus on asking the question of how Trump's Twitter behavior changed over time.  (Note that we are focusing on his first administration as Trump was kicked off the platform after January 6, 2021 and has since used his own social media platform Truth Social.) This is a broad question, so let's break it up into a few specific questions to tackle using the tools we have talked about thus far to help demonstrate that based on the concepts and code we have talked about in class you are able to do quite a bit. 
 
 1. How did the frequency of Trump's tweets change over time -- and, in particular, once he was elected President.
 2. When did Trump tweet?  Was "Executive Time" a change to his behavior or did he always have a self-defined "Executive Time"?
@@ -165,7 +165,7 @@ tweets %>%
   scale_x_continuous(n.breaks = 13, limits = c(0,23))
 ```
 
-Did Trump's use to twitter change after he was elected President?  Certainly we would think that the content might change -- as well as how likely it was to be favorited and retweeted -- but how about the frequency and timing of the tweets?   
+Did Trump's use of twitter change after he was elected President?  Certainly we would think that the content might change -- as well as how likely it was to be favorited and retweeted -- but how about the frequency and timing of the tweets?   
 
 Let's create an indicator variable `PostPresident` using the `date` variable to define whether the date is before (`FALSE`) or after (`TRUE`)  his election as president (we could also use the inauguration date, but some claimed that his behavior would change once he was officially projected.)
 
@@ -458,7 +458,7 @@ tweet_words %>%
   knitr::kable()
 ```
 
-An now, how about by hour?  What is on President Trump's mind, on average, at every hour of the day?
+And now, how about by hour?  What is on President Trump's mind, on average, at every hour of the day?
 
 ```{r}
 # INSERT CODE HERE
@@ -470,7 +470,7 @@ Pushing ahead, we could also do hour by pre/post presidency (or year) to see how
 
 So far we have focused on frequency of word use, but another way to make this comparison is to look at the relative "odds" that each word is used pre/post presidency.  After all, "Trump" is used by Trump both before and after his presidency so perhaps that is not a great indicator of content.  We could instead consider the relative rate at which a word is used Post-Presidency relative to Pre-presidency.
 
-We are going to count each word stem use pre and post-presidency, then select only those words that were used at least 5 times, then `spread` the data so that if a word appears Pre-Presidency but not Post-Presidency (or visa-versa) we will create a matching word with the filled in value of 0, then we are going to ungroup the data so that the observation is now a word rather than a word-timing combination (look to see how the tibble changes before and after the ungroup() by running these code snippets separately to see).  Then we are going to `mutate_each` to compute the fraction of times a word is used relative to all words (the `.` indicates the particular value of each variable -- note that we are adding a `+ 1` to each of those values to avoid errors when taking the log later).  We then compute the `ratio` by computing the relative frequency of each word used pre and post presidency and take the log of that ratio because of extreme outliers before arranging the tibble in decreasing value of ratio
+We are going to count each word stem use pre and post-presidency, then select only those words that were used at least 5 times, then `spread` the data so that if a word appears Pre-Presidency but not Post-Presidency (or visa-versa) we will create a matching word with the filled in value of 0, then we are going to ungroup the data so that the observation is now a word rather than a word-timing combination (look to see how the tibble changes before and after the ungroup() by running these code snippets separately).  Then we are going to `mutate_each` to compute the fraction of times a word is used relative to all words (the `.` indicates the particular value of each variable -- note that we are adding a `+ 1` to each of those values to avoid errors when taking the log later).  We then compute the `ratio` by computing the relative frequency of each word used pre and post presidency and take the log of that ratio because of extreme outliers before arranging the tibble in decreasing value of ratio
 
 So let's compute the log odds ratio for each word pre and post presidency.
 

@@ -409,7 +409,7 @@ rawvote %>%
 
 So a critical question is always -- how many clusters should I use?  An issue with answering this question is that there really isn't a statistical theory to guide this determination.  More clusters will always "explain" more variation, and if we choose the number of clusters equal to the number of data points we will perfectly "fit/explain" the data. But it will be a trivial explanation and not give us any real information. Recall that one of the goals is to use the clustering to reduce the dimensionality of the data in a way that recovers a "meaningful" representation of the underlying data. 
 
-So let us explore how the clustering changes for different numbers of centers.  What we are going to do is to create a tibble called `kcluster.fl` that is going contain the results of a `kmeans` clustering for 10 different choices of `K` that varies from 1 to 10.
+So let us explore how the clustering changes for different numbers of centers.  What we are going to do is to create a tibble called `kcluster.fl` that is going to contain the results of a `kmeans` clustering for 10 different choices of `K` that varies from 1 to 10.
 
 ```{r}
 kcluster.fl <- 
@@ -421,7 +421,7 @@ kcluster.fl <-
   )
 ```
 
-The above code uses the `map` function which is how we can apply a function across an index.  So in line 419 we are going to take `map` to apply the sequence of `K` values we defined running from 1 to 10 the `kmeans()` algorithm applied to the `rawvotes` tibble.  The `.x` in the line reveals where we are going to substitute the value being mapped.  So the object `kcluster` is going to be a list of 10 elements -- each list element being a `kmeans` object associated with the choice of `K` centers.
+The above code uses the `map` function which is how we can apply a function across an index.  So in line 418 we are going to take `map` to apply the sequence of `K` values we defined running from 1 to 10 the `kmeans()` algorithm applied to the `rawvotes` tibble.  The `.x` in the line reveals where we are going to substitute the value being mapped.  So the object `kcluster` is going to be a list of 10 elements -- each list element being a `kmeans` object associated with the choice of `K` centers.
 
 We then map the `tidy` function to the list of `kcluster` we just created -- creating a list called `tidysummary` where each element is the summary associated with the kth clustering. We next create a tibble that augments the original data being clustered -- `rawvotes` with the cluster label associated with the kth clustering.  (But remember that the meaning of those labels is not fixed!)
 
@@ -489,7 +489,7 @@ Too see what we have created, let us take a look within the tibble `kcluster.fl`
 fits <- kcluster.fl[[2]]
 ```
 
-To extract the total within sum-of-squares from this we can write a loop to extract the information.  Note that we are using `[[]]` to select an element from a list.  Then we can plot the relationship.  For simplicity I have used the standard plot command in base R rather than 
+To extract the total within sum-of-squares from this we can write a loop to extract the information.  Note that we are using `[[]]` to select an element from a list.  Then we can plot the relationship.  
 
 
 ```{r}
@@ -522,7 +522,7 @@ tidy(fl.cluster) %>%
   arrange(-pct_rep_2020)
 ```
 
-Now change the order of the factor so that it is ordered from most Trump supporting to most Clinton Supporting. To do so we need to use the `factor` function to re-define the order of the levels.
+Now change the order of the factor so that it is ordered from most Trump supporting to most Clinton supporting. To do so we need to use the `factor` function to re-define the order of the levels.
 
 ```{r}
 dat.cluster <- dat.cluster %>%
