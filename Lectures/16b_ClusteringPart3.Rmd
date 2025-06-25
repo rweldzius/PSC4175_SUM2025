@@ -1,0 +1,297 @@
+---
+title: "Clustering and NLP: Text, Tweets, and Sentiment"
+subtitle: "Part 3b"
+author: "Prof. Ryan Weldzius"
+institute: "Villanova University"
+# date: "Slides Updated: `r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    # self_contained: true
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css:
+      - default
+      - css/lexis.css
+      - css/lexis-fonts.css
+    #seal: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+
+---
+
+```{css,echo = F}
+.small .remark-code { /*Change made here*/
+  font-size: 85% !important;
+}
+.tiny .remark-code { /*Change made here*/
+  font-size: 50% !important;
+}
+```
+
+```{r,include=F}
+set.seed(123)
+options(width=60)
+knitr::opts_chunk$set(fig.align='center',fig.width=9,fig.height=5,message=F,warning=F)
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+```
+
+# Returning to Trump (Wrangle from last time)
+
+```{r,message=F,warning=F}
+require(tidyverse)
+require(tidytext) # Might need to install.packages('textdata')
+tweet_words <- read_rds(file="../Data/Trump_tweet_words.Rds") %>% 
+  mutate(PostPresident = Tweeting.date > as.Date('2016-11-06'))
+nrc <- read_rds('../Data/nrc.Rds')
+tweet_sentiment <- tweet_words %>%
+    inner_join(nrc, by = "word") 
+prepost_logodds <- tweet_words %>%
+  count(word, PostPresident) %>%
+  spread(PostPresident, n, fill = 0) %>%
+  ungroup() %>%
+  mutate(totFALSE = sum(`FALSE`),
+         totTRUE = sum(`TRUE`)) %>%
+  mutate(propFALSE = (`FALSE` + 1) / (totFALSE + 1),
+         propTRUE = (`TRUE` + 1) / (totTRUE + 1)) %>%
+  mutate(odds = propTRUE / propFALSE) %>% 
+  mutate(logodds = log(odds)) %>%
+  select(word,logodds,odds,everything())
+
+tweet_sentiment <- tweet_words %>%
+    inner_join(nrc, by = "word") 
+  
+tweet_sentiment_summary <- tweet_sentiment %>%
+  group_by(PostPresident, sentiment) %>%
+  count(document,sentiment) %>%
+  pivot_wider(names_from = sentiment, 
+              values_from = n, 
+              values_fill = 0) %>% # same as spread()!
+  mutate(sentiment = positive - negative)
+```
+
+
+---
+
+# Understanding Trump
+
+- When Trump is coded as "positive" or "negative", what is he saying?
+
+--
+
+- Look at log-odds ratio words, matched to sentiment!
+
+```{r}
+p <- prepost_logodds %>%
+  inner_join(nrc, by = "word") %>%
+  filter(!sentiment %in% c("positive", "negative")) %>%
+  mutate(sentiment = reorder(sentiment, -logodds),
+         word = reorder(word, -logodds)) %>%
+  group_by(sentiment) %>%
+  top_n(10, abs(logodds)) %>%
+  ungroup() %>%
+  ggplot(aes(y = word, x = logodds, fill = logodds < 0)) +
+  facet_wrap(~ sentiment, scales = "free", nrow = 2) +
+  geom_bar(stat = "identity") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  labs(x = "", y = "Post / Pre log ratio") +
+  scale_fill_manual(name = "", labels = c("Post", "Pre"),
+                    values = c("red", "lightblue")) + 
+  theme(legend.position = 'bottom')
+```
+
+---
+
+# Understanding Trump
+
+```{r,out.width = "800px"}
+p
+```
+
+---
+
+# Text as predictors
+
+- Let's say we didn't know when each tweet was written
+
+--
+
+- Could we predict whether it was written during his presidency or not?
+
+--
+
+  - Logit model using **text** as predictors
+  
+  
+---
+
+# Text as Data
+
+- Predict tweets by average of words' log-odds!
+
+```{r,message=F}
+toanalyze <- tweet_words %>%
+  select(document,word,PostPresident) %>%
+  left_join(prepost_logodds %>% select(word,logodds)) %>% # Link data with log-odds
+  group_by(document,PostPresident) %>%
+  summarise(logodds = mean(logodds)) %>% # Calculate average log-odds by document
+  ungroup()
+
+m <- glm(PostPresident ~ logodds,toanalyze,family = binomial) # logit regression
+```
+
+---
+
+# Text as Data
+
+- Evaluate the performance
+
+```{r,message=F,warning=F}
+require(tidymodels)
+forAUC <- toanalyze %>% # Evaluate model performance
+  mutate(preds = predict(m,type = 'response'),
+         truth = factor(PostPresident,levels = c('TRUE','FALSE')))
+
+roc_auc(forAUC,'truth','preds')
+
+p <- roc_curve(forAUC,'truth','preds') %>%
+  ggplot(aes(x = 1-specificity,y = sensitivity)) + 
+  geom_line() + 
+  geom_abline(intercept = 0,slope = 1,linetype = 'dashed')
+```
+
+---
+
+# Evaluate performance
+
+```{r}
+p
+```
+
+---
+
+# Evaluate on some sample tweets
+
+```{r}
+raw_tweets <- read_rds('../Data/Trumptweets.Rds')
+set.seed(20)
+toCheck <- raw_tweets %>% slice(sample(1:nrow(.),size = 10))
+
+toCheck %>%
+  select(content)
+```
+
+---
+
+# Evaluate on some sample tweets
+
+```{r}
+toTest <- toCheck %>% left_join(toanalyze,by = c('id' = 'document')) # Merge the raw text with the log-odds
+
+toTest %>%
+  mutate(preds = predict(m,newdata = toTest,type = 'response')) %>%
+  select(content,PostPresident,preds) %>%
+  mutate(pred_binary = preds > .5) %>%
+  filter(PostPresident != pred_binary)
+# We only make 3 mistakes!
+```
+
+
+---
+
+# Can we do better if we add sentiment?
+
+```{r}
+toanalyze <- toanalyze %>%
+  left_join(tweet_sentiment_summary) %>%
+  drop_na()
+
+m1 <- glm(PostPresident ~ logodds,toanalyze,family = binomial)
+m2 <- glm(PostPresident ~ logodds + sentiment,toanalyze,family = binomial)
+m3 <- glm(PostPresident ~ logodds + anger + anticipation + disgust + fear + joy + sadness + surprise + trust,toanalyze,family = binomial)
+
+forAUC <- toanalyze %>%
+  mutate(preds1 = predict(m1,type = 'response'),
+         preds2 = predict(m2,type = 'response'),
+         preds3 = predict(m3,type = 'response'),
+         truth = factor(PostPresident,levels = c('TRUE','FALSE')))
+```
+
+---
+
+# Can we do better if we add sentiment?
+
+```{r}
+roc_auc(forAUC,'truth','preds1') %>% mutate(model = 'logodds') %>%
+  bind_rows(roc_auc(forAUC,'truth','preds2') %>% 
+              mutate(model = 'logodds & net sentiment')) %>%
+  bind_rows(roc_auc(forAUC,'truth','preds3') %>% 
+              mutate(model = 'logodds & detailed sentiment'))
+```
+
+--
+
+- Not really
+
+---
+
+# Conclusion
+
+- Sentiment can...
+
+--
+
+  - ...help us describe the data (i.e., infer what someone meant)
+  
+  - ...help us predict the data (RQ: do positive tweets get more likes?)
+
+---
+
+# Pat yourselves on the back! Look how far you've come...
+
+--
+
+- R basics, ggplot, and **MORE ggplot**!!
+
+--
+
+- Data wrangling and univariate analysis (**AND MORE ggplot!**)
+
+--
+
+- Multivariate analysis (conditional means)
+
+--
+
+- Uncertainty
+
+--
+
+- Linear regression
+
+--
+
+- Logistic regression
+
+--
+
+- K-means clustering and Natural Language Processing
+
+---
+
+# Conclusion
+
+--
+
+- That's it! We're done!
+
+```{r, echo=F, out.width = "500px"}
+knitr::include_graphics("https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExenJ0MHFkMXZ0Y3oyMHAwMzJoa3Q4Y29mdms5eHh1a3FyaWg3NnVyciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3ohzdIuqJoo8QdKlnW/giphy.gif")
+```  
+

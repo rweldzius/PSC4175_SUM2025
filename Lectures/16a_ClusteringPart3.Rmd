@@ -1,0 +1,427 @@
+---
+title: "Clustering and NLP: Text, Tweets, and Sentiment"
+subtitle: "Part 3a"
+author: "Prof. Ryan Weldzius"
+institute: "Villanova University"
+# date: "Slides Updated: `r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    # self_contained: true
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css:
+      - default
+      - css/lexis.css
+      - css/lexis-fonts.css
+    #seal: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+
+---
+
+```{css,echo = F}
+.small .remark-code { /*Change made here*/
+  font-size: 85% !important;
+}
+.tiny .remark-code { /*Change made here*/
+  font-size: 50% !important;
+}
+```
+
+```{r,include=F}
+set.seed(123)
+options(width=60)
+knitr::opts_chunk$set(fig.align='center',fig.width=9,fig.height=5,message=F,warning=F)
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+```
+
+# Returning to Trump
+
+```{r,message=F,warning=F}
+require(tidyverse)
+tweet_words <- read_rds(file="../Data/Trump_tweet_words.Rds")
+tweet_words <- tweet_words %>% 
+  mutate(PostPresident = Tweeting.date > as.Date('2016-11-06'))
+```
+
+---
+
+# Log-Odds
+
+- **Odds**: Probability a word is used pre/post presidency
+  
+- **Log**: Useful for removing skew in data
+  
+--
+
+- Interactive code time!
+
+```{r, echo=F, out.width = "500px"}
+knitr::include_graphics("figs/shaq.gif")
+```
+
+---
+
+# Odds Step 1
+
+```{r, eval=F}
+(odds1 <- tweet_words %>%
+  count(word, PostPresident) %>%
+  spread(PostPresident, n, fill = 0) %>%
+  ungroup() %>%
+  mutate(totFALSE = sum(`FALSE`),
+         totTRUE = sum(`TRUE`)))
+```
+
+
+---
+
+# Odds Step 1
+
+```{r}
+(odds1 <- tweet_words %>%
+  count(word, PostPresident) %>%
+  spread(PostPresident, n, fill = 0) %>%
+  ungroup() %>%
+  mutate(totFALSE = sum(`FALSE`),
+         totTRUE = sum(`TRUE`)))
+```
+
+---
+
+# Odds Step 2
+
+```{r, eval=F}
+(odds2 <- odds1 %>%
+  mutate(propFALSE = (`FALSE` + 1) / (totFALSE + 1),
+         propTRUE = (`TRUE` + 1) / (totTRUE + 1)))
+```
+
+---
+
+# Odds Step 2
+
+```{r}
+(odds2 <- odds1 %>%
+  mutate(propFALSE = (`FALSE` + 1) / (totFALSE + 1),
+         propTRUE = (`TRUE` + 1) / (totTRUE + 1)))
+```
+
+
+---
+
+# Odds Step 3
+
+```{r, eval=F}
+(odds3 <- odds2 %>%
+  mutate(odds = propTRUE / propFALSE))
+```
+
+---
+
+# Odds Step 3
+
+```{r}
+(odds3 <- odds2 %>%
+  mutate(odds = propTRUE / propFALSE))
+```
+
+---
+
+# Why log?
+
+```{r,message=F}
+odds3 %>%
+  ggplot(aes(x = odds)) + 
+  geom_histogram()
+```
+
+---
+
+# Why log?
+
+```{r}
+odds3 %>%
+  ggplot(aes(x = odds)) + 
+  geom_histogram(bins = 15) + 
+  scale_x_log10()
+```
+
+---
+
+# Odds Step 4
+
+```{r}
+(prepost_logodds <- odds3 %>%
+  mutate(logodds = log(odds))) %>%
+  select(word,logodds,odds,everything())
+```
+
+---
+
+# Effect of becoming president
+
+```{r, warning=FALSE}
+p <- prepost_logodds %>%
+  group_by(logodds > 0) %>%
+  top_n(15, abs(logodds)) %>%
+  ungroup() %>%
+  mutate(word = reorder(word, logodds)) %>%
+  ggplot(aes(word, logodds, fill = logodds < 0)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  ylab("Post-President/Pre-President log ratio") +
+  scale_fill_manual(name = "", labels = c("President", "Pre-President"),
+                    values = c("red", "lightblue"))
+```
+
+---
+
+# Effect of becoming president
+
+```{r,out.width = "800px"}
+p
+```
+
+---
+
+# Meaning
+
+- Thus far, everything is **topic**-related
+
+--
+
+  - How often he talks about things
+  
+--
+
+- But what does he **mean** when he talks about Mueller?
+
+--
+
+  - We can probably guess
+  
+--
+
+- But we want a more systematic method
+
+--
+
+  - **Sentiment**: the *feeling* behind words
+  
+---
+
+# Meaning
+
+- **Sentiment** analysis is based on **dictionaries**
+
+--
+
+  - Just like **stop words** from last week!
+  
+--
+
+  - Prepared lists of words, but tagged according to **emotion**
+  
+--
+
+- Good dictionary included in `tidytext` package
+
+```{r,warning = F}
+require(tidytext) # Might need to install.packages('textdata')
+# nrc <- get_sentiments("nrc")
+# If this doesn't work on your computer, just load it with read_rds()
+nrc <- read_rds('../Data/nrc.Rds')
+```
+
+---
+
+# Meaning
+
+```{r}
+nrc
+```
+
+---
+
+# Sentiment by Pre/Post Presidency
+
+- Measure sentiment by proportion of words
+
+--
+
+- Divide by pre/post presidency
+
+--
+
+```{r}
+(word_freq <- tweet_words %>%
+  group_by(PostPresident) %>%
+  count(word) %>%
+  filter(sum(n) >= 5) %>%
+  mutate(prop = prop.table(n))) # Faster way of calculating proportions!
+```
+
+---
+
+# Sentiment by Pre/Post Presidency
+
+- Attaching sentiment from `nrc`
+
+--
+
+  - `inner_join()`: only keeps words that appear in `nrc`
+  
+```{r}
+word_freq_sentiment <- word_freq %>%
+    inner_join(nrc, by = "word") 
+```
+
+---
+
+# Sentiment overall
+
+```{r}
+p <- word_freq_sentiment %>%
+  group_by(sentiment) %>%
+  top_n(10, n) %>%
+  ungroup() %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(y = word, x = n)) +
+  facet_wrap(~ sentiment, scales = "free", nrow = 3) + 
+  geom_bar(stat = "identity")
+```
+
+---
+
+# Sentiment overall
+
+```{r}
+p
+```
+
+---
+
+# Sentiment overall
+
+- Could also just calculate positive sentiments - negative sentiments
+
+--
+
+  - Want to do this at the tweet level
+  
+--
+
+```{r,warning=F,message=F}
+tweet_sentiment <- tweet_words %>%
+    inner_join(nrc, by = "word") 
+  
+tweet_sentiment_summary <- tweet_sentiment %>%
+  group_by(PostPresident, sentiment) %>%
+  count(document,sentiment) %>%
+  pivot_wider(names_from = sentiment, 
+              values_from = n, 
+              values_fill = 0) %>% # same as spread()!
+  mutate(sentiment = positive - negative)
+```
+
+---
+
+# Sentiment overall
+
+```{r}
+tweet_sentiment_summary %>%
+  select(PostPresident,document,sentiment,everything())
+```
+
+---
+
+# Sentiment by presidency
+
+- Calculate total number of tweets by sentiment
+
+--
+
+```{r}
+tweet_sentiment_summary  %>%
+  group_by(PostPresident) %>%
+  mutate(ntweet = 1) %>%
+  summarize(across(-document, sum)) %>%
+  select(PostPresident,sentiment,everything())
+```
+
+---
+
+# Sentiment by presidency
+
+- Univariate distributions!
+
+--
+
+```{r,warning = FALSE}
+p <- tweet_sentiment_summary %>%
+  ggplot(aes(x = sentiment, y = PostPresident)) + 
+  geom_boxplot() +
+  labs(y= "Trump is president", x = "Sentiment Score: Positive - Negative")
+```
+
+
+
+---
+
+# Sentiment by presidency
+
+- Univariate distributions!
+
+```{r,message=F,warning = FALSE}
+p
+```
+
+---
+
+# Sentiment by hour
+
+- Univariate distributions
+
+  - Comparing sentiment by hour
+  
+--
+
+```{r,message=F}
+p <- tweet_sentiment %>%
+  group_by(PostPresident,Tweeting.hour,sentiment) %>%
+  count(document,sentiment) %>%
+  pivot_wider(names_from = sentiment, values_from = n, values_fill = 0) %>% 
+  mutate(sentiment = positive - negative) %>%
+  summarize(AvgSentiment = mean(sentiment)) %>%
+  ggplot(aes(y = AvgSentiment, x= as.integer(Tweeting.hour), color=PostPresident)) + 
+  geom_point(size = 4) +
+  geom_hline(yintercept = 0,linetype = 'dashed') + 
+  labs(x = "Tweeting Hour (EST)", y = "Average Tweet Sentiment: Positive - Negative", color = "Is President?") +
+  scale_x_continuous(n.breaks = 13, limits = c(0,23))
+```
+
+---
+
+# Sentiment by hour
+
+- Comparing sentiment by hour
+
+```{r}
+p
+```
+
+
+
+---
+
+# Next Time
+
+- Understanding Trump via Tweets! 
